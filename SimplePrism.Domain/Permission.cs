@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace SimplePrism.Domain
 {
-    public class Class1
+    class Permission
     {
+        public string Id { get; set; }
+
+        public string UserId { get; set; }
+
+        public int PermissionCode { get; set; }
     }
 }
