@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Solution Items", "0. Solution Items", "{E768EA23-F03F-4B25-BE55-D150E7996A10}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Solution Items", "0. Sol
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Presentation Layer", "1. Presentation Layer", "{A68AA9BD-1A00-4E73-9663-FCBBF6667020}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Servuce Layer", "2. Servuce Layer", "{51C002B0-D7B0-4E50-BD18-947EE3090039}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Service Layer", "2. Service Layer", "{51C002B0-D7B0-4E50-BD18-947EE3090039}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Persistence Layer", "3. Persistence Layer", "{27928320-2DF8-4485-8233-6854A8F1A173}"
 EndProject
