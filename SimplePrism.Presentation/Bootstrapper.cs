@@ -1,6 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Unity;
+using SimplePrism.Presentation.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace SimplePrism.Presentation
 
             Application.Current.MainWindow.Show();
 
-            //EventServiceFactory.EventService.PublishEvent(EventTopicNames.ShellInitlized); //通知Shell初始化完成
+            EventServiceFactory.EventService.PublishEvent(EventTopicNames.ShellInitlized); //通知Shell初始化完成
         }
 
         protected override void InitializeModules()
@@ -41,7 +42,7 @@ namespace SimplePrism.Presentation
 
         protected override void ConfigureModuleCatalog()
         {
-            
+
             base.ConfigureModuleCatalog();
         }
 
