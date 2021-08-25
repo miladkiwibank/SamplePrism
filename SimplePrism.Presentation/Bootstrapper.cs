@@ -1,6 +1,8 @@
 ﻿using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Unity;
+using SimplePrism.Presentation.Common.Services;
+using SimplePrism.Presentation.Services;
 using SimplePrism.Presentation.Services.Common;
 using System;
 using System.Collections.Generic;
@@ -49,6 +51,8 @@ namespace SimplePrism.Presentation
         protected override void ConfigureContainer()
         {
             base.ConfigureContainer();
+            Container.RegisterType<IApplicationState, ApplicationState>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IApplicationStateSetter, ApplicationState>(new ContainerControlledLifetimeManager());
         }
     }
 }

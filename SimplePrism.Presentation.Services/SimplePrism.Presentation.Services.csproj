@@ -54,6 +54,8 @@
     <Compile Include="Common\EventTopicNames.cs" />
     <Compile Include="Common\GenericEvent.cs" />
     <Compile Include="Common\PublishEventDelegate.cs" />
+    <Compile Include="IApplicationState.cs" />
+    <Compile Include="IApplicationStateSetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
