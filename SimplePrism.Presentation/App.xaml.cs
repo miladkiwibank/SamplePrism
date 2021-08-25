@@ -13,6 +13,7 @@ using System.Windows;
 using Unity;
 using Microsoft.Practices.Unity;
 using System.IO;
+using SimplePrism.Presentation.Common;
 
 namespace SimplePrism.Presentation
 {
@@ -98,7 +99,7 @@ namespace SimplePrism.Presentation
         {
             if (ex == null) return;
 
-            //TODO: Show exception dialog
+            ExceptionReporter.Show(new Exception[] { ex });
             Environment.Exit(1);
         }
 
