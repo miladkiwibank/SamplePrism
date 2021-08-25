@@ -73,6 +73,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="RegionNames.cs" />
     <Compile Include="Services\ApplicationState.cs" />
     <Compile Include="Services\PresentationServices.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

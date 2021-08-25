@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Common\ApplicationScreens.cs" />
     <Compile Include="Common\EventParameters.cs" />
     <Compile Include="Common\EventServiceExtensions.cs" />
     <Compile Include="Common\EventServiceFactory.cs" />
