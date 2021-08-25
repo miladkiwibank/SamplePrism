@@ -1,4 +1,5 @@
 ﻿using SimplePrism.Presentation.Common.Commands;
+using SimplePrism.Presentation.Services.Common;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,6 +14,33 @@ namespace SimplePrism.Presentation.Common.Services
     /// </summary>
     public static class PresentationServices
     {
-        public static ObservableCollection<ICategoryCommand> CommandCategories { get; private set; }
+        public static ObservableCollection<ICategoryCommand> NavigationCommandCategories { get; private set; }
+        public static ObservableCollection<DashboardCommandCategory> DashboardCommandCategories { get; private set; }
+
+        public static void Initialize()
+        {
+            NavigationCommandCategories = new ObservableCollection<ICategoryCommand>();
+            DashboardCommandCategories = new ObservableCollection<DashboardCommandCategory>();
+            EventServiceFactory.EventService.GetEvent<GenericEvent<ICategoryCommand>>().Subscribe(OnCommandAdded);
+        }
+
+        private static void OnCommandAdded(EventParameters<ICategoryCommand> parameters)
+        {
+            if (parameters.Topic == EventTopicNames.NavigationCommandAdded)
+                NavigationCommandCategories.Add(parameters.Value);
+
+            if (parameters.Topic == EventTopicNames.DashboardCommandAdded)
+            {
+                var category = DashboardCommandCategories.FirstOrDefault(x => x.Category == parameters.Value.Category);
+                if (category == null)
+                {
+                    category = new DashboardCommandCategory(parameters.Value.Category);
+                    DashboardCommandCategories.Add(category);
+                }
+                if (parameters.Value.Order > category.Order)
+                    category.Order = parameters.Value.Order;
+                category.AddCommand(parameters.Value);
+            }
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace SimplePrism.Presentation.Services.Common
     public static class EventTopicNames
     {
         public const string ShellInitlized = "Shell Initialized";
-        public static object NavigationCommandAdded;
+        public const string NavigationCommandAdded = "Navigation Command Added";
+        public const string DashboardCommandAdded = "Dashboard Command Added";
     }
 }
