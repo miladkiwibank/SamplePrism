@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimplePrism.Presentation.Common.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,12 +24,13 @@ namespace SimplePrism.Presentation
         public Shell()
         {
             InitializeComponent();
+
             this.Loaded += Shell_Loaded;
         }
 
         private void Shell_Loaded(object sender, RoutedEventArgs e)
         {
-            throw new Exception("test");
+            InteractionService.UserIntraction.DisplayPopup("testname", "testtitle", "testcontent");
         }
     }
 }

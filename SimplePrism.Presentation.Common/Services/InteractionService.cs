@@ -24,14 +24,11 @@ namespace SimplePrism.Presentation.Common.Services
         static InteractionService()
         {
             UserIntraction = ServiceLocator.Current.GetInstance<IUserInteraction>();
-            DialogService = ServiceLocator.Current.GetInstance<IDialogService>();
         }
 
         private const uint WmMousefirst = 512u;
         private const uint WmMouselast = 521u;
 
         public static IUserInteraction UserIntraction { get; private set; }
-
-        public static IDialogService DialogService { get; private set; }
     }
 }

@@ -25,7 +25,7 @@ namespace SimplePrism.Presentation.Common
             }
             catch (Exception ex)
             {
-                InteractionService.DialogService.ShowMessage(ex.Message);
+                InteractionService.UserIntraction.DisplayPopup("", "", ex.Message);
             }
         }
     }

@@ -31,6 +31,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
@@ -38,6 +39,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,22 +52,39 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Converters\VisibilityConverter.cs" />
-    <Compile Include="Interaction\ConfirmationWindow.xaml.cs">
-      <DependentUpon>ConfirmationWindow.xaml</DependentUpon>
+    <Compile Include="Interaction\CloseBehavior.cs" />
+    <Compile Include="Interaction\FeedbackWindow.xaml.cs">
+      <DependentUpon>FeedbackWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Interaction\ConfirmationWindowCommandButton.cs" />
-    <Compile Include="Interaction\ConfirmationWindowViewModel.cs" />
-    <Compile Include="Interaction\DialogService.cs" />
+    <Compile Include="Interaction\PopupWindow.xaml.cs">
+      <DependentUpon>PopupWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Interaction\SplashScreenForm.xaml.cs">
+      <DependentUpon>SplashScreenForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Interaction\UserInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SimplePrism.Presentation.Common\SimplePrism.Presentation.Common.csproj">
+      <Project>{090722A3-2296-4AC5-A892-A037BA1E3734}</Project>
+      <Name>SimplePrism.Presentation.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimplePrism.Presentation.Services\SimplePrism.Presentation.Services.csproj">
       <Project>{8E4554A9-6676-439F-87EC-99F8B6C5394F}</Project>
       <Name>SimplePrism.Presentation.Services</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Interaction\ConfirmationWindow.xaml">
+    <Page Include="Interaction\FeedbackWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Interaction\PopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Interaction\SplashScreenForm.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

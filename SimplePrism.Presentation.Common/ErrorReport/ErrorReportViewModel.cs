@@ -88,7 +88,7 @@ namespace SimplePrism.Presentation.Common
 
         private void Submit(string obj)
         {
-            if (string.IsNullOrEmpty(UserMessage) && !InteractionService.DialogService.Confirm(""))
+            if (string.IsNullOrEmpty(UserMessage) && !InteractionService.UserIntraction.AskQuestion(""))
             {
                 return;
             }
@@ -155,8 +155,7 @@ namespace SimplePrism.Presentation.Common
             }
             catch (Exception ex)
             {
-                InteractionService.DialogService
-                    .ShowMessage(string.Format("Unable to save file '{0}' : {1}", fileName, ex.Message));
+                InteractionService.UserIntraction.GiveFeedBack(string.Format("Unable to save file '{0}' : {1}", fileName, ex.Message));
             }
         }
     }

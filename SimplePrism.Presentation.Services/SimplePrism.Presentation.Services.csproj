@@ -57,7 +57,6 @@
     <Compile Include="Common\PublishEventDelegate.cs" />
     <Compile Include="IApplicationState.cs" />
     <Compile Include="IApplicationStateSetter.cs" />
-    <Compile Include="IDialogService.cs" />
     <Compile Include="IUserInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

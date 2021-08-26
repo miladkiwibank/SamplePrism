@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace SimplePrism.Presentation.Common.Services
 {
@@ -21,15 +22,26 @@ namespace SimplePrism.Presentation.Common.Services
         {
         }
 
+        public void NotifyEvent(string eventName, object dataObject)
+        {
+            //var terminalId = CurrentTerminal.Id;
+            //var departmentId = CurrentDepartment.Id;
+            //var roleId = CurrentSignedInUser.UserRole.Id;
+            //_notificationService.NotifyEvent(eventName, dataObject, terminalId, departmentId, roleId,
+            //    x => x.PublishEvent(EventTopicNames.ExecuteEvent, true));
+        }
+
         //public Screens ActiveScreen { get; private set; }
 
-        //public User CurrentSignedUser { get; private set; }
+        //public User CurrentSignedInUser { get; private set; }
 
         //public int MaxChannelCount { get; }
 
         public IEnumerable<string> Roles => m_roles;
 
         public IEnumerable<string> PermissionCodes => m_permissionCodes;
+
+        public Dispatcher MainDispatcher { get; set; }
 
         //public void SetCurrentSignedUser(User user)
         //{

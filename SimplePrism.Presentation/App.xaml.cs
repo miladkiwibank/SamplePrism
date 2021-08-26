@@ -14,6 +14,8 @@ using Unity;
 using Microsoft.Practices.Unity;
 using System.IO;
 using SimplePrism.Presentation.Common;
+using SimplePrism.Presentation.Common.Services;
+using Microsoft.Practices.ServiceLocation;
 
 namespace SimplePrism.Presentation
 {
@@ -24,10 +26,31 @@ namespace SimplePrism.Presentation
     {
         //private Mutex m_mutex;
 
+        [DllImport("user32")]
+        public static extern int RegisterWindowMessage(string message);
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
+            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+#if DEBUG
+            RunInDebugMode();
+#else
+            RunInReleaseMode();
+#endif         
+        }
+
+        private void RunInDebugMode()
+        {
+            var bootstrapper = new Bootstrapper();
+            bootstrapper.Run();
+            bootstrapper.Container.Resolve<IApplicationState>().MainDispatcher = Application.Current.Dispatcher;
+        }
+
+        private void RunInReleaseMode()
+        {
             //程序单实例运行
             //m_mutex = new Mutex(true, "SimplePrism", out bool createdNew);
             //if (!createdNew)
@@ -76,7 +99,6 @@ namespace SimplePrism.Presentation
             {
                 HandleException(ex);
             }
-
         }
 
         private void HandleConfigurationError(ConfigurationErrorsException ex)
@@ -145,6 +167,9 @@ namespace SimplePrism.Presentation
         /// <returns>如果窗口设入了前台，返回值为非零；如果窗口未被设入前台，返回值为零</returns>
         [DllImport("User32.dll")]
         private static extern bool SetForegroundWindow(IntPtr hwnd);
+
+        [DllImport("user32")]
+        public static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
 
         private static void HandleRunningInstance(Process instance)
         {

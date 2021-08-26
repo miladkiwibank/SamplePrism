@@ -134,6 +134,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SimplePrism.Controls\SimplePrism.Controls.csproj">
+      <Project>{DD03EF96-0853-45B8-85FD-5B1955CC7A5D}</Project>
+      <Name>SimplePrism.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SimplePrism.Presentation.Common\SimplePrism.Presentation.Common.csproj">
       <Project>{090722A3-2296-4AC5-A892-A037BA1E3734}</Project>
       <Name>SimplePrism.Presentation.Common</Name>

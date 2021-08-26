@@ -2,6 +2,7 @@
 using Prism.Modularity;
 using Prism.Unity;
 using SimplePrism.Presentation.Common.Services;
+using SimplePrism.Presentation.Controls.Interaction;
 using SimplePrism.Presentation.Services;
 using SimplePrism.Presentation.Services.Common;
 using System;
@@ -24,8 +25,14 @@ namespace SimplePrism.Presentation
 
         protected override void InitializeShell()
         {
+            //TODO: LocalizationDictionary.ChangeLanguage(LocalSettings.CurrentLanguage);
+
+            InteractionService.UserIntraction.ToggleSplashScreen();
+            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             base.InitializeShell();
 
+            Application.Current.MainWindow = (Shell)Shell;
+            InteractionService.UserIntraction.ToggleSplashScreen();
             Application.Current.MainWindow.Show();
 
             EventServiceFactory.EventService.PublishEvent(EventTopicNames.ShellInitlized); //通知Shell初始化完成
@@ -53,6 +60,7 @@ namespace SimplePrism.Presentation
             base.ConfigureContainer();
             Container.RegisterType<IApplicationState, ApplicationState>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IApplicationStateSetter, ApplicationState>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IUserInteraction, UserInteraction>(new ContainerControlledLifetimeManager());
         }
     }
 }
