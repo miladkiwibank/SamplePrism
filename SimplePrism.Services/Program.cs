@@ -100,8 +100,8 @@ namespace SimplePrism.Services
                 //pipeline.AddLast(new NumberEncoder(), new BigIntegerDecoder(), new FactorialServerHandler());
             }));
 
-            tcpChannel = tcpBootstrap.BindAsync(8002).Result;
-            udpChannel = udpBootstrap.BindAsync(8002).Result;
+            tcpChannel = tcpBootstrap.BindAsync(Settings.Default.Port).Result;
+            udpChannel = udpBootstrap.BindAsync(Settings.Default.Port).Result;
 
             return true;
         }
