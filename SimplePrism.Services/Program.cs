@@ -56,16 +56,17 @@ namespace SimplePrism.Services
     {
         private ILogger m_logger = LogManager.GetCurrentClassLogger();
 
+        IEventLoopGroup bossGroup = new MultithreadEventLoopGroup(1);
         IEventLoopGroup udpWorkerGroup = new MultithreadEventLoopGroup();
+        IEventLoopGroup tcpWorkerGroup = new MultithreadEventLoopGroup();
         Bootstrap udpBootstrap = new Bootstrap();
+        ServerBootstrap tcpBootstrap = new ServerBootstrap();
+        IChannel tcpChannel;
         IChannel udpChannel;
 
         public DeviceServiceControl()
         {
             //TODO: 读取配置参数,加载服务
-            //int port = Settings.Default.Port;
-
-
         }
 
         public bool Continue(HostControl hostControl)
@@ -88,7 +89,19 @@ namespace SimplePrism.Services
                 {
                     channel.Pipeline.AddLast("PA_UDP", new UdpServerHandler());
                 }));
-            udpChannel = udpBootstrap.BindAsync(Settings.Default.Port).Result;
+
+            tcpBootstrap.Group(bossGroup, tcpWorkerGroup);
+            tcpBootstrap.Channel<TcpServerSocketChannel>()
+                .ChildOption(ChannelOption.SoKeepalive, true);
+            tcpBootstrap.ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
+            {
+                IChannelPipeline pipeline = channel.Pipeline;
+                pipeline.AddLast("TCP", new TcpServerHandler());
+                //pipeline.AddLast(new NumberEncoder(), new BigIntegerDecoder(), new FactorialServerHandler());
+            }));
+
+            tcpChannel = tcpBootstrap.BindAsync(8002).Result;
+            udpChannel = udpBootstrap.BindAsync(8002).Result;
 
             return true;
         }
@@ -98,6 +111,39 @@ namespace SimplePrism.Services
             udpChannel.CloseAsync();
             udpWorkerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
             return true;
+        }
+    }
+
+    class TcpServerHandler : ChannelHandlerAdapter
+    {
+        public override void ChannelRead(IChannelHandlerContext context, object message)
+        {
+            if (message is IByteBuffer buffer)
+                Console.WriteLine("Server recevied tcp message ：" + buffer.ToString(Encoding.UTF8));
+
+            byte[] bytes = Encoding.UTF8.GetBytes("Hello client " + DateTime.Now.Ticks);
+            IByteBuffer byteBuffer = Unpooled.WrappedBuffer(bytes);
+            context.WriteAndFlushAsync(byteBuffer);
+        }
+
+        //public override void ChannelActive(IChannelHandlerContext context)
+        //{
+        //    //base.ChannelActive(context);
+
+        //    byte[] bytes = Encoding.UTF8.GetBytes("Hello client " + DateTime.Now.Ticks);
+
+        //    IByteBuffer buffer = Unpooled.WrappedBuffer(bytes);
+
+        //    context.WriteAsync(buffer);
+        //}
+
+        public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
+
+        public override void ExceptionCaught(IChannelHandlerContext context, Exception exception)
+        {
+            Console.WriteLine(exception);
+            context.CloseAsync();
+            //base.ExceptionCaught(context, exception);
         }
     }
 
