@@ -45,7 +45,7 @@ namespace SimplePrism.Services
             // Make sure to add a Unity.Configuration to the using statements.
             // container.LoadConfiguration();
 
-            container.RegisterInstance(QuartzConfig.Factory);
+            //container.RegisterInstance(QuartzConfig.Factory);
             container.RegisterInstance(QuartzConfig.Scheduler);
 
             //container.AddExtension(new ContainerExtension());

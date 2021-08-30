@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- This file contains job definitions in schema version 2.0 format -->
+
+<job-scheduling-data xmlns="http://quartznet.sourceforge.net/JobSchedulingData" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.0">
+
+  <processing-directives>
+    <overwrite-existing-data>true</overwrite-existing-data>
+  </processing-directives>
+
+  <schedule>
+
+    <!--TestJob测试 任务配置 -->
+    <job>
+      <name>TestJob</name>
+      <group>TestJob</group>
+      <description>测试任务</description>
+      <job-type>SimplePrism.Services.Jobs.SampleJob,SimplePrism.Services</job-type>
+      <durable>true</durable>
+      <recover>false</recover>
+    </job>
+
+    <trigger>
+      <cron>
+        <name>TestJobTrigger</name>
+        <group>TestJob</group>
+        <job-name>TestJob</job-name>
+        <job-group>TestJob</job-group>
+        <!-- 开始时间小于当前时间则程序启动后立即执行一次 -->
+        <!--<start-time>2017-06-01T00:00:00+08:00</start-time>-->
+        <!-- 每月最后一天23点执行 -->
+        <!--<cron-expression>0 0 23 L * ?</cron-expression>-->
+        <!--在整点和半点时每15秒触发3 L * ?-->
+        <!--<cron-expression>0/15 0/30 * * * ?</cron-expression>-->
+        <!--每5秒触发一次-->
+        <cron-expression>0/5 * * * * ?</cron-expression>
+      </cron>
+    </trigger>
+  </schedule>
+</job-scheduling-data>

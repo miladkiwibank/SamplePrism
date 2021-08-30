@@ -24,13 +24,6 @@ namespace SimplePrism.Presentation
         public Shell()
         {
             InitializeComponent();
-
-            this.Loaded += Shell_Loaded;
-        }
-
-        private void Shell_Loaded(object sender, RoutedEventArgs e)
-        {
-            InteractionService.UserIntraction.DisplayPopup("testname", "testtitle", "testcontent");
         }
     }
 }

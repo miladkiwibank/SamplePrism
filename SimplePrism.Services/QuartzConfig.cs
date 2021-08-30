@@ -19,15 +19,14 @@ namespace SimplePrism.Services
         private static readonly Lazy<IScheduler> scheduler =
             new Lazy<IScheduler>(() => factory.Value.GetScheduler());
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static ISchedulerFactory Factory => factory.Value;
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //public static ISchedulerFactory Factory => factory.Value;
 
         /// <summary>
         /// 
         /// </summary>
         public static IScheduler Scheduler => scheduler.Value;
-
     }
 }

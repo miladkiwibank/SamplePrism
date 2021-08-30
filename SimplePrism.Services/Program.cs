@@ -35,12 +35,6 @@ namespace SimplePrism.Services
                 x.SetDisplayName("SamplePrism数据接入服务");
                 x.SetDescription("SamplePrism 服务端");
             });
-#if DEBUG
-            while (Console.ReadKey().Key == ConsoleKey.Escape)
-            {
-                return;
-            }
-#endif
         }
 
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -93,6 +87,8 @@ namespace SimplePrism.Services
             //tcpChannel = tcpBootstrap.BindAsync(Settings.Default.Port).Result;
             udpChannel = udpBootstrap.BindAsync(Settings.Default.Port).Result;
 
+            QuartzConfig.Scheduler.Start();
+            m_logger.Info("server started");
             return true;
         }
 
