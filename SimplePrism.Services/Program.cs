@@ -52,7 +52,7 @@ namespace SimplePrism.Services
         }
     }
 
-    class DeviceServiceControl : ServiceControl, ServiceSuspend
+    class DeviceServiceControl : ServiceControl
     {
         private ILogger m_logger = LogManager.GetCurrentClassLogger();
 
@@ -67,16 +67,6 @@ namespace SimplePrism.Services
         public DeviceServiceControl()
         {
             //TODO: 读取配置参数,加载服务
-        }
-
-        public bool Continue(HostControl hostControl)
-        {
-            return true;
-        }
-
-        public bool Pause(HostControl hostControl)
-        {
-            return true;
         }
 
         public bool Start(HostControl hostControl)
@@ -108,8 +98,13 @@ namespace SimplePrism.Services
 
         public bool Stop(HostControl hostControl)
         {
+            tcpChannel.CloseAsync();
             udpChannel.CloseAsync();
-            udpWorkerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
+            Task.WhenAll(
+             bossGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
+             tcpWorkerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
+             udpWorkerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1))
+            );
             return true;
         }
     }
