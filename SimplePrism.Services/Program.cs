@@ -56,12 +56,12 @@ namespace SimplePrism.Services
     {
         private ILogger m_logger = LogManager.GetCurrentClassLogger();
 
-        IEventLoopGroup bossGroup = new MultithreadEventLoopGroup(1);
+        //IEventLoopGroup bossGroup = new MultithreadEventLoopGroup(1);
         IEventLoopGroup udpWorkerGroup = new MultithreadEventLoopGroup();
-        IEventLoopGroup tcpWorkerGroup = new MultithreadEventLoopGroup();
+        //IEventLoopGroup tcpWorkerGroup = new MultithreadEventLoopGroup();
         Bootstrap udpBootstrap = new Bootstrap();
-        ServerBootstrap tcpBootstrap = new ServerBootstrap();
-        IChannel tcpChannel;
+        //ServerBootstrap tcpBootstrap = new ServerBootstrap();
+        //IChannel tcpChannel;
         IChannel udpChannel;
 
         public DeviceServiceControl()
@@ -80,17 +80,17 @@ namespace SimplePrism.Services
                     channel.Pipeline.AddLast("PA_UDP", new UdpServerHandler());
                 }));
 
-            tcpBootstrap.Group(bossGroup, tcpWorkerGroup);
-            tcpBootstrap.Channel<TcpServerSocketChannel>()
-                .ChildOption(ChannelOption.SoKeepalive, true);
-            tcpBootstrap.ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
-            {
-                IChannelPipeline pipeline = channel.Pipeline;
-                pipeline.AddLast("TCP", new TcpServerHandler());
-                //pipeline.AddLast(new NumberEncoder(), new BigIntegerDecoder(), new FactorialServerHandler());
-            }));
+            //tcpBootstrap.Group(bossGroup, tcpWorkerGroup);
+            //tcpBootstrap.Channel<TcpServerSocketChannel>()
+            //    .ChildOption(ChannelOption.SoKeepalive, true);
+            //tcpBootstrap.ChildHandler(new ActionChannelInitializer<IChannel>(channel =>
+            //{
+            //    IChannelPipeline pipeline = channel.Pipeline;
+            //    pipeline.AddLast("TCP", new TcpServerHandler());
+            //    //pipeline.AddLast(new NumberEncoder(), new BigIntegerDecoder(), new FactorialServerHandler());
+            //}));
 
-            tcpChannel = tcpBootstrap.BindAsync(Settings.Default.Port).Result;
+            //tcpChannel = tcpBootstrap.BindAsync(Settings.Default.Port).Result;
             udpChannel = udpBootstrap.BindAsync(Settings.Default.Port).Result;
 
             return true;
@@ -98,13 +98,13 @@ namespace SimplePrism.Services
 
         public bool Stop(HostControl hostControl)
         {
-            tcpChannel.CloseAsync();
+            //tcpChannel.CloseAsync();
             udpChannel.CloseAsync();
-            Task.WhenAll(
-             bossGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
-             tcpWorkerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
-             udpWorkerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1))
-            );
+            //Task.WhenAll(
+            // bossGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
+            // tcpWorkerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1)),
+            udpWorkerGroup.ShutdownGracefullyAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromSeconds(1));
+            //);
             return true;
         }
     }
