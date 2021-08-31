@@ -31,5 +31,53 @@ namespace SamplePrism.Services.Properties {
                 return ((int)(this["Port"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
+        public string InfluxIP {
+            get {
+                return ((string)(this["InfluxIP"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8086")]
+        public ushort InfluxPort {
+            get {
+                return ((ushort)(this["InfluxPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SamplePrism")]
+        public string InfluxDbName {
+            get {
+                return ((string)(this["InfluxDbName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InfluxUser {
+            get {
+                return ((string)(this["InfluxUser"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string InfluxPwd {
+            get {
+                return ((string)(this["InfluxPwd"]));
+            }
+            set {
+                this["InfluxPwd"] = value;
+            }
+        }
     }
 }

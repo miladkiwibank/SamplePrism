@@ -143,8 +143,14 @@
     <Reference Include="Unity.Container, Version=5.11.11.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\Unity.Container.5.11.11\lib\net45\Unity.Container.dll</HintPath>
     </Reference>
+    <Reference Include="Vibrant.InfluxDB.Client, Version=4.0.4.0, Culture=neutral, PublicKeyToken=8467aa639b032f6d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Vibrant.InfluxDB.Client.4.0.4\lib\net45\Vibrant.InfluxDB.Client.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InfluxConfig.cs" />
+    <Compile Include="InfluxDb\InfluxModelBase.cs" />
+    <Compile Include="InfluxDb\InfluxServiceBase.cs" />
     <Compile Include="Jobs\SampleJob.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -180,5 +186,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+      <Project>{71128390-cb78-4362-8e9f-962e6a5195c2}</Project>
+      <Name>Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -15,7 +15,7 @@ namespace SimplePrism.Services.Jobs
         public void Execute(IJobExecutionContext context)
         {
             //var param = context.JobDetail.JobDataMap.GetString(""); //任务启动传参
-            m_logger.Debug("Sample job executed");
+            //m_logger.Debug("Sample job executed");
         }
     }
 }
