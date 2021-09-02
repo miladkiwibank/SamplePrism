@@ -32,7 +32,7 @@ namespace SamplePrism.Presentation.Common.Commands
         }
     }
 
-    public class CaptionCommand<T> : DelegateCommand<T>, ICommand
+    public class CaptionCommand<T> : DelegateCommand<T>, ICommand, ICaptionCommand
     {
         public CaptionCommand(string caption, Action<T> executeMethod, Func<T, bool> canExecuteMethod)
             : base(executeMethod, canExecuteMethod)

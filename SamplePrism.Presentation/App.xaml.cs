@@ -40,6 +40,22 @@ namespace SamplePrism.Presentation
 #else
             RunInReleaseMode();
 #endif         
+            LoadLibraries();
+        }
+
+        private void LoadLibraries()
+        {
+            AppDomainSetup setup = AppDomain.CurrentDomain.SetupInformation;
+            setup.ApplicationBase = AppDomain.CurrentDomain.BaseDirectory;
+            setup.PrivateBinPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Modules")
+                + Path.Combine(AppDomain.CurrentDomain.BaseDirectory + "ThirdParty");
+            setup.CachePath = setup.ApplicationBase;
+            setup.ShadowCopyFiles = "true";
+        }
+
+        private void LoadCustomDirectory()
+        {
+            throw new NotImplementedException();
         }
 
         private void RunInDebugMode()
@@ -76,6 +92,7 @@ namespace SamplePrism.Presentation
             }
 
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
             try
             {
                 var bootstrapper = new Bootstrapper();
@@ -99,6 +116,11 @@ namespace SamplePrism.Presentation
             {
                 HandleException(ex);
             }
+        }
+
+        private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+
         }
 
         private void HandleConfigurationError(ConfigurationErrorsException ex)

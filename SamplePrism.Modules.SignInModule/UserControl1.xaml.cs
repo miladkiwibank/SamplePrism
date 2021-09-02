@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SamplePrism.Modules.ManagementModule.Views
+namespace SamplePrism.Modules.SignInModule
 {
     /// <summary>
-    /// Interaction logic for ViewA.xaml
+    /// UserControl1.xaml 的交互逻辑
     /// </summary>
-    public partial class ViewA : UserControl
+    public partial class UserControl1 : UserControl
     {
-        public ViewA()
+        public UserControl1()
         {
             InitializeComponent();
         }

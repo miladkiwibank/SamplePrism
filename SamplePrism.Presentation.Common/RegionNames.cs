@@ -8,8 +8,8 @@ namespace SamplePrism.Presentation.Common
 {
     public static class RegionNames
     {
-        public const string MainRegion = "Main Region";
+        public const string MainRegion = "MainRegion";
 
-        public const string ContentRegion = "Content Region";
+        public const string ContentRegion = "ContentRegion";
     }
 }

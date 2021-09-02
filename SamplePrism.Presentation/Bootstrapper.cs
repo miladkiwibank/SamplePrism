@@ -1,6 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
 using Prism.Modularity;
 using Prism.Unity;
+using SamplePrism.Presentation.Common;
 using SamplePrism.Presentation.Common.Services;
 using SamplePrism.Presentation.Controls.Interaction;
 using SamplePrism.Presentation.Services;
@@ -28,7 +29,6 @@ namespace SamplePrism.Presentation
             //TODO: LocalizationDictionary.ChangeLanguage(LocalSettings.CurrentLanguage);
 
             InteractionService.UserIntraction.ToggleSplashScreen();
-            System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
             base.InitializeShell();
 
             Application.Current.MainWindow = (Shell)Shell;
@@ -45,13 +45,12 @@ namespace SamplePrism.Presentation
 
         protected override IModuleCatalog CreateModuleCatalog()
         {
-            return base.CreateModuleCatalog();
-            //return new DirectoryModuleCatalog() { ModulePath = @".\Modules" };
+            //return base.CreateModuleCatalog();
+            return new DirectoryModuleCatalog() { ModulePath = @".\Modules" };
         }
 
         protected override void ConfigureModuleCatalog()
         {
-
             base.ConfigureModuleCatalog();
         }
 
@@ -61,6 +60,7 @@ namespace SamplePrism.Presentation
             Container.RegisterType<IApplicationState, ApplicationState>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IApplicationStateSetter, ApplicationState>(new ContainerControlledLifetimeManager());
             Container.RegisterType<IUserInteraction, UserInteraction>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<IModuleInitializationService, ModuleInitializationService>(new ContainerControlledLifetimeManager());
         }
     }
 }

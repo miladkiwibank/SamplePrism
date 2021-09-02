@@ -48,15 +48,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\ApplicationScreens.cs" />
+    <Compile Include="Common\AppScreenChangeData.cs" />
+    <Compile Include="Common\AppScreens.cs" />
     <Compile Include="Common\EventParameters.cs" />
     <Compile Include="Common\EventServiceExtensions.cs" />
     <Compile Include="Common\EventServiceFactory.cs" />
     <Compile Include="Common\EventTopicNames.cs" />
     <Compile Include="Common\GenericEvent.cs" />
+    <Compile Include="Common\PermissionNames.cs" />
+    <Compile Include="Common\PermissionRegistry.cs" />
     <Compile Include="Common\PublishEventDelegate.cs" />
     <Compile Include="IApplicationState.cs" />
     <Compile Include="IApplicationStateSetter.cs" />
-    <Compile Include="IUserInteraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

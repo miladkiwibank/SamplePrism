@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SamplePrism.Presentation.Services.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace SamplePrism.Presentation.Services
 {
     public interface IApplicationState
     {
-        //Screens ActiveScreen { get; }
+        AppScreens ActiveScreen { get; }
 
         //int MaxChannelCount { get; }
 

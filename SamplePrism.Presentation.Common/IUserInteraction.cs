@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SamplePrism.Presentation.Services
+namespace SamplePrism.Presentation.Common
 {
     public interface IUserInteraction
     {

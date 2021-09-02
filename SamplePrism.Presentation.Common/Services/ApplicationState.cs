@@ -1,4 +1,6 @@
 ﻿using SamplePrism.Presentation.Services;
+using SamplePrism.Presentation.Services.Common;
+using Stateless;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +14,19 @@ namespace SamplePrism.Presentation.Common.Services
     {
         private IList<string> m_roles = new List<string>();
         private IList<string> m_permissionCodes = new List<string>();
+        private readonly StateMachine<AppScreens, AppScreens> m_screenState;
 
         public ApplicationState()
         {
+            m_screenState = new StateMachine<AppScreens, AppScreens>(() => ActiveScreen, state => ActiveScreen = state);
+            m_screenState.OnUnhandledTrigger(HandlerTrigger);
+        }
 
+        private void HandlerTrigger(AppScreens arg1, AppScreens arg2)
+        {
+            ActiveScreen = arg2;
+            if (arg1 != arg2)
+                new AppScreenChangeData(arg1, arg2).PublishEvent(EventTopicNames.ScreenChanged);
         }
 
         public void InitializeSettings()
@@ -31,7 +42,7 @@ namespace SamplePrism.Presentation.Common.Services
             //    x => x.PublishEvent(EventTopicNames.ExecuteEvent, true));
         }
 
-        //public Screens ActiveScreen { get; private set; }
+        public AppScreens ActiveScreen { get; private set; }
 
         //public User CurrentSignedInUser { get; private set; }
 
@@ -48,9 +59,10 @@ namespace SamplePrism.Presentation.Common.Services
 
         //}
 
-        //public void SetCurrentApplicationScreen
-        //{
-
-        //}
+        public void SetCurrentApplicationScreen(AppScreens appScreen)
+        {
+            //InteractionService.ClearMouseClickQueue();
+            m_screenState.Fire(appScreen);
+        }
     }
 }

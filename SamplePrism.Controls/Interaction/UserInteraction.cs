@@ -1,4 +1,5 @@
-﻿using SamplePrism.Presentation.Common.Commands;
+﻿using SamplePrism.Presentation.Common;
+using SamplePrism.Presentation.Common.Commands;
 using SamplePrism.Presentation.Services;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,7 @@ namespace SamplePrism.Presentation.Controls.Interaction
             m_popupDataViewModel = new PopupDataViewModel(applicationState);
         }
 
-        public PopupWindow PopupWindow
-        {
-            get { return m_popupWindow ?? (m_popupWindow = CreatePopupWindow()); }
-        }
+        public PopupWindow PopupWindow => m_popupWindow ?? (m_popupWindow = CreatePopupWindow());
 
         private PopupWindow CreatePopupWindow()
         {
