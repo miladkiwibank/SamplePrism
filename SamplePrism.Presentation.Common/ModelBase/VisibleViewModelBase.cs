@@ -1,11 +1,6 @@
 ﻿using Prism.Commands;
-using SamplePrism.Presentation.Services.Common;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamplePrism.Presentation.Common.ModelBase
 {
@@ -16,29 +11,37 @@ namespace SamplePrism.Presentation.Common.ModelBase
         [Browsable(false)]
         public VisibleViewModelBase CallingView { get; set; }
 
-        private DelegateCommand<object> m_closeCommand;
+        private DelegateCommand<object> _closeCommand;
 
-        public DelegateCommand<object> CloseCommand =>
-            m_closeCommand ?? (m_closeCommand = new DelegateCommand<object>(OnRequestClose, CanClose));
+        [Browsable(false)]
+        public DelegateCommand<object> CloseCommand
+        {
+            get { return _closeCommand ?? (_closeCommand = new DelegateCommand<object>(OnRequestClose, CanClose)); }
+        }
 
         protected virtual bool CanClose(object arg)
         {
             return true;
         }
 
+        private void PublishClose()
+        {
+            CommonEventPublisher.PublishViewClosedEvent(this);
+        }
+
         private void OnRequestClose(object obj)
         {
-            this.PublishEvent(EventTopicNames.ViewClosed, true);
+            PublishClose();
         }
 
         public virtual void OnClosed()
         {
-            // overried if needed
+            //override if needed
         }
 
         public virtual void OnShown()
         {
-            // overried if needed
+            //override if needed
         }
     }
 }

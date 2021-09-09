@@ -1,20 +1,11 @@
-﻿using SamplePrism.Modules.UserModule.Views;
-using Prism.Ioc;
-using Prism.Modularity;
-using Prism.Regions;
+﻿using Prism.Modularity;
 
 namespace SamplePrism.Modules.UserModule
 {
     public class UserModuleModule : IModule
     {
-        public void OnInitialized(IContainerProvider containerProvider)
+        public void Initialize()
         {
- 
-        }
-
-        public void RegisterTypes(IContainerRegistry containerRegistry)
-        {
-            
         }
     }
 }

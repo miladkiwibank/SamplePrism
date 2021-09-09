@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace SamplePrism.Presentation.Common.Commands
 {
-    public class CategoryCommand<T> : CaptionCommand<T>, ICommand, ICategoryCommand
+    public class CategoryCommand<T> : CaptionCommand<T>, ICategoryCommand
     {
         public CategoryCommand(string caption, string category, Action<T> executeMethod)
             : base(caption, executeMethod)
@@ -36,9 +31,7 @@ namespace SamplePrism.Presentation.Common.Commands
         }
 
         public string Category { get; set; }
-
         public string ImageSource { get; set; }
-
         public int Order { get; set; }
     }
 }

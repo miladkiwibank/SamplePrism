@@ -1,31 +1,25 @@
-﻿using SamplePrism.Presentation.Common.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using SamplePrism.Infrastructure.ExceptionReporter;
 
-namespace SamplePrism.Presentation.Common
+namespace SamplePrism.Presentation.Common.ErrorReport
 {
     public static class ExceptionReporter
     {
         public static void Show(params Exception[] exceptions)
         {
-            if (exceptions == null)
-            {
-                return;
-            }
+            if (exceptions == null) return;
             try
             {
-                ErrorReportViewModel errorReportViewModel = new ErrorReportViewModel(exceptions);
-                ErrorReportView errorReportView = new ErrorReportView() { DataContext = errorReportViewModel };
-                errorReportView.ShowDialog();
-                string errorMessage = errorReportViewModel.GetErrorReport();
-                //Logger.Default.Error(errorMessage);
+                var viewModel = new ErrorReportViewModel(exceptions);
+                var view = new ErrorReportView { DataContext = viewModel };
+                view.ShowDialog();
+                var report = viewModel.GetErrorReport();
+                Logger.Log(report);
             }
-            catch (Exception ex)
+            catch (Exception internalException)
             {
-                InteractionService.UserIntraction.DisplayPopup("", "", ex.Message);
+                MessageBox.Show(internalException.Message);
             }
         }
     }

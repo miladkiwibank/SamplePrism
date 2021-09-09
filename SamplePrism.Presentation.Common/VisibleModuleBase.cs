@@ -3,37 +3,32 @@ using Prism.Regions;
 using SamplePrism.Presentation.Common.Commands;
 using SamplePrism.Presentation.Services;
 using SamplePrism.Presentation.Services.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamplePrism.Presentation.Common
 {
     public abstract class VisibleModuleBase : ModuleBase
     {
-        private readonly IRegionManager m_regionManager;
-        private readonly AppScreens m_appScreen;
-        private readonly IApplicationStateSetter m_applicationStateSetter;
-        private ICategoryCommand m_navigationCommand;
+        private readonly IRegionManager _regionManager;
+        private readonly AppScreens _appScreen;
+        private readonly IApplicationStateSetter _applicationStateSetter;
+        private ICategoryCommand _navigationCommand;
 
         protected VisibleModuleBase(IRegionManager regionManager, AppScreens appScreen)
         {
-            m_applicationStateSetter = ServiceLocator.Current.GetInstance<IApplicationStateSetter>();
-            m_regionManager = regionManager;
-            m_appScreen = appScreen;
+            _applicationStateSetter = ServiceLocator.Current.GetInstance<IApplicationStateSetter>();
+            _regionManager = regionManager;
+            _appScreen = appScreen;
         }
 
         public void Activate()
         {
-            m_applicationStateSetter.SetCurrentApplicationScreen(m_appScreen);
-            m_regionManager.ActivateRegion(RegionNames.MainRegion, GetVisibleView());
+            _applicationStateSetter.SetCurrentApplicationScreen(_appScreen);
+            _regionManager.ActivateRegion(RegionNames.MainRegion, GetVisibleView());
         }
 
         protected void SetNavigationCommand(string caption, string category, string image, int order = 0)
         {
-            m_navigationCommand = new CategoryCommand<string>(caption, category, image, OnNavigate, CanNavigate) { Order = order };
+            _navigationCommand = new CategoryCommand<string>(caption, category, image, OnNavigate, CanNavigate) { Order = order };
         }
 
         protected virtual bool CanNavigate(string arg)
@@ -50,8 +45,8 @@ namespace SamplePrism.Presentation.Common
 
         protected sealed override void OnPostInitialization()
         {
-            if (m_navigationCommand != null)
-                m_navigationCommand.PublishEvent(EventTopicNames.NavigationCommandAdded);
+            if (_navigationCommand != null)
+                _navigationCommand.PublishEvent(EventTopicNames.NavigationCommandAdded);
             base.OnPostInitialization();
         }
     }

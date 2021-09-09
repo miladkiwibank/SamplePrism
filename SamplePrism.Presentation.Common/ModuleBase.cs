@@ -1,17 +1,14 @@
-﻿using Microsoft.Practices.ServiceLocation;
+using Microsoft.Practices.ServiceLocation;
 using Prism.Modularity;
 using SamplePrism.Presentation.Common.Commands;
 using SamplePrism.Presentation.Common.ModelBase;
 using SamplePrism.Presentation.Services.Common;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SamplePrism.Presentation.Common
 {
-    static class ObjectCache
+    internal static class ObjectCache
     {
         private static readonly IDictionary<Type, VisibleViewModelBase> Cache = new Dictionary<Type, VisibleViewModelBase>();
         private static readonly IList<string> NonSingletonTypeNames = new List<string>();
@@ -56,10 +53,10 @@ namespace SamplePrism.Presentation.Common
             {
                 try
                 {
-                    var view = NonSingletonTypeNames.Contains(typeof(TView).Name)
-                        ? Activator.CreateInstance<TView>()
-                        : ServiceLocator.Current.GetInstance<TView>();
-                    Update(typeof(TView), view);
+                    Update(typeof(TView),
+                           NonSingletonTypeNames.Contains(typeof(TView).Name)
+                               ? Activator.CreateInstance<TView>()
+                               : ServiceLocator.Current.GetInstance<TView>());
                 }
                 catch (Exception)
                 {
@@ -72,7 +69,7 @@ namespace SamplePrism.Presentation.Common
 
     public abstract class ModuleBase : IModule
     {
-        private readonly List<ICategoryCommand> m_dashboardCommands = new List<ICategoryCommand>();
+        private readonly List<ICategoryCommand> _dashboardCommands = new List<ICategoryCommand>();
 
         public void Initialize()
         {
@@ -85,35 +82,31 @@ namespace SamplePrism.Presentation.Common
 
         protected virtual void OnPreInitialization()
         {
-
         }
 
         protected virtual void OnInitialization()
         {
-
         }
 
         protected virtual void OnPostInitialization()
         {
-            m_dashboardCommands.ForEach(x => x.PublishEvent(EventTopicNames.DashboardCommandAdded));
-            m_dashboardCommands.Clear();
+            _dashboardCommands.ForEach(x => x.PublishEvent(EventTopicNames.DashboardCommandAdded));
+            _dashboardCommands.Clear();
         }
 
         protected virtual void OnStartUp()
         {
-
         }
 
-        protected void AddDashboardCommand<TView>(string caption, string category, int order = 0)
-            where TView : VisibleViewModelBase
+        protected void AddDashboardCommand<TView>(string caption, string category, int order = 0) where TView : VisibleViewModelBase
         {
-            m_dashboardCommands.Add(new CategoryCommand<TView>(caption, category, OnExecute) { Order = order });
+            _dashboardCommands.Add(new CategoryCommand<TView>(caption, category, OnExecute) { Order = order });
+            ObjectCache.Add(typeof(TView));
         }
 
-        private static void OnExecute<TView>(TView view)
-            where TView : VisibleViewModelBase
+        private static void OnExecute<TView>(TView obj) where TView : VisibleViewModelBase
         {
-            view.PublishEvent(EventTopicNames.ViewClosed, true);
+            CommonEventPublisher.PublishViewAddedEvent(ObjectCache.Activate<TView>());
         }
     }
 }

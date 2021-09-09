@@ -1,16 +1,17 @@
 ﻿using Microsoft.Practices.ServiceLocation;
-using SamplePrism.Presentation.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
+using System.Security;
 using System.Windows;
 
 namespace SamplePrism.Presentation.Common.Services
 {
     public static class InteractionService
     {
+        private const uint WmMousefirst = 0x200;
+        private const uint WmMouselast = 0x209;
+
+        [StructLayout(LayoutKind.Sequential)]
         public struct NativeMessage
         {
             public IntPtr handle;
@@ -18,17 +19,47 @@ namespace SamplePrism.Presentation.Common.Services
             public IntPtr wParam;
             public IntPtr lParam;
             public uint time;
-            public Point p;
+            public System.Drawing.Point p;
         }
+
+        [SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern bool PeekMessage(out NativeMessage message, IntPtr handle, uint filterMin, uint filterMax, uint flags);
 
         static InteractionService()
         {
             UserIntraction = ServiceLocator.Current.GetInstance<IUserInteraction>();
         }
 
-        private const uint WmMousefirst = 512u;
-        private const uint WmMouselast = 521u;
+        public static void ClearMouseClickQueue()
+        {
+            NativeMessage message;
+            while (PeekMessage(out message, IntPtr.Zero, WmMousefirst, WmMouselast, 1))
+            {
+            }
+        }
 
-        public static IUserInteraction UserIntraction { get; private set; }
+        public static IUserInteraction UserIntraction { get; set; }
+
+        public static void ShowKeyboard()
+        {
+            UserIntraction.ShowKeyboard();
+        }
+
+        public static void HideKeyboard()
+        {
+            UserIntraction.HideKeyboard();
+        }
+
+        public static void ToggleKeyboard()
+        {
+            UserIntraction.ToggleKeyboard();
+        }
+
+        public static void Scale(FrameworkElement control)
+        {
+            UserIntraction.Scale(control);
+        }
     }
 }

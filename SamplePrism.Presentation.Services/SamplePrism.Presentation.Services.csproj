@@ -31,13 +31,35 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AxInterop.cidv5callerid">
+      <HintPath>..\Libs\AxInterop.cidv5callerid.dll</HintPath>
+    </Reference>
+    <Reference Include="Fluentscript">
+      <HintPath>..\Libs\Fluentscript.dll</HintPath>
+    </Reference>
+    <Reference Include="Gma.QrCodeNet.Encoding, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Gma.QrCodeNet.0.4.1.2\lib\net40\Gma.QrCodeNet.Encoding.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.cidv5callerid">
+      <HintPath>..\Libs\Interop.cidv5callerid.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
     </Reference>
+    <Reference Include="ReachFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Printing" />
     <Reference Include="System.Windows" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,25 +67,225 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="Zen.Barcode.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b5ae55aa76d2d9de, processorArchitecture=MSIL">
+      <HintPath>..\packages\Zen.Barcode.Rendering.Framework.3.1.10729.1\lib\Zen.Barcode.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\ApplicationScreens.cs" />
+    <Compile Include="CommonServices\Common\AccountDetailData.cs" />
+    <Compile Include="CommonServices\Common\AccountScreenRow.cs" />
+    <Compile Include="CommonServices\Common\AccountSummaryData.cs" />
+    <Compile Include="CommonServices\Common\AccountTransactionSummary.cs" />
+    <Compile Include="CommonServices\Common\ActionData.cs" />
+    <Compile Include="CommonServices\Common\ActionType.cs" />
+    <Compile Include="CommonServices\Common\AutomationCommandData.cs" />
+    <Compile Include="CommonServices\Common\DateRange.cs" />
+    <Compile Include="CommonServices\Common\IActionType.cs" />
+    <Compile Include="CommonServices\Common\ICustomPrinter.cs" />
+    <Compile Include="CommonServices\Common\IDevice.cs" />
+    <Compile Include="CommonServices\Common\IProgramSetting.cs" />
+    <Compile Include="CommonServices\Common\IProgramSettings.cs" />
+    <Compile Include="CommonServices\Common\IWorkPeriodProcessor.cs" />
+    <Compile Include="CommonServices\Common\OrderTagData.cs" />
+    <Compile Include="CommonServices\Common\ParameterSources.cs" />
+    <Compile Include="CommonServices\Common\ParameterValue.cs" />
+    <Compile Include="CommonServices\Common\RuleActionTypeRegistry.cs" />
+    <Compile Include="CommonServices\Common\RuleConstraint.cs" />
+    <Compile Include="CommonServices\Common\RuleConstraintMatch.cs" />
+    <Compile Include="CommonServices\Common\RuleEvent.cs" />
+    <Compile Include="CommonServices\Common\RuleEventNames.cs" />
+    <Compile Include="CommonServices\Common\SerialPortService.cs" />
+    <Compile Include="CommonServices\Common\SimpleReport.cs" />
+    <Compile Include="CommonServices\Common\TicketStateData.cs" />
+    <Compile Include="CommonServices\Common\TicketTagData.cs" />
+    <Compile Include="CommonServices\IAccountService.cs" />
+    <Compile Include="CommonServices\IAutomationService.cs" />
+    <Compile Include="CommonServices\ICacheService.cs" />
+    <Compile Include="CommonServices\IDepartmentService.cs" />
+    <Compile Include="CommonServices\IDeviceService.cs" />
+    <Compile Include="CommonServices\IEmailService.cs" />
+    <Compile Include="CommonServices\IEntityService.cs" />
+    <Compile Include="CommonServices\IExpressionService.cs" />
+    <Compile Include="CommonServices\ILogService.cs" />
+    <Compile Include="CommonServices\IMenuService.cs" />
+    <Compile Include="CommonServices\IMessagingService.cs" />
+    <Compile Include="CommonServices\Implementations\AccountModule\AccountRowBuilder.cs" />
+    <Compile Include="CommonServices\Implementations\AccountModule\AccountService.cs" />
+    <Compile Include="CommonServices\Implementations\AutomationModule\ActionDataBuilder.cs" />
+    <Compile Include="CommonServices\Implementations\AutomationModule\AutomationService.cs" />
+    <Compile Include="CommonServices\Implementations\AutomationModule\ConditionChecker.cs" />
+    <Compile Include="CommonServices\Implementations\AutomationModule\Evaluator.cs" />
+    <Compile Include="CommonServices\Implementations\AutomationModule\NotificationService.cs" />
+    <Compile Include="CommonServices\Implementations\AutomationModule\OperatorConstants.cs" />
+    <Compile Include="CommonServices\Implementations\AutomationModule\Preprocessor.cs" />
+    <Compile Include="CommonServices\Implementations\AutomationModule\RuleExecutor.cs" />
+    <Compile Include="CommonServices\Implementations\CacheService.cs" />
+    <Compile Include="CommonServices\Implementations\DepartmentModule\DepartmentService.cs" />
+    <Compile Include="CommonServices\Implementations\DeviceService.cs" />
+    <Compile Include="CommonServices\Implementations\EMailService.cs" />
+    <Compile Include="CommonServices\Implementations\EntityModule\EntityService.cs" />
+    <Compile Include="CommonServices\Implementations\ExpressionModule\Accessors\DataAccessor.cs" />
+    <Compile Include="CommonServices\Implementations\ExpressionModule\Accessors\EntityAccessor.cs" />
+    <Compile Include="CommonServices\Implementations\ExpressionModule\Accessors\HelperAccessor.cs" />
+    <Compile Include="CommonServices\Implementations\ExpressionModule\Accessors\OrderAccessor.cs" />
+    <Compile Include="CommonServices\Implementations\ExpressionModule\Accessors\TicketAccessor.cs" />
+    <Compile Include="CommonServices\Implementations\ExpressionModule\ExpressionEngine.cs" />
+    <Compile Include="CommonServices\Implementations\ExpressionModule\ExpressionService.cs" />
+    <Compile Include="CommonServices\Implementations\LogService.cs" />
+    <Compile Include="CommonServices\Implementations\MenuModule\MenuService.cs" />
+    <Compile Include="CommonServices\Implementations\MenuModule\MenuSpecifications.cs" />
+    <Compile Include="CommonServices\Implementations\MenuModule\PriceListService.cs" />
+    <Compile Include="CommonServices\Implementations\Messaging\MessagingService.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\AsyncPrintTask.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\CustomPrinters\SaveToFilePrinter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\CustomPrinters\SettingPrinter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\CustomPrinters\UrlPrinter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\AbstractLineFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\BoxFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\CenterAlignFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\FormatTag.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\FormattedDocument.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\GenericFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\HorizontalRuleFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\ILineFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\JustifyAlignFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\LeftAlignFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\RightAlignFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Formatters\TitleFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\HtmlConverter\HtmlCssParser.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\HtmlConverter\HtmlFromXamlConverter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\HtmlConverter\HtmlLexicalAnalyzer.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\HtmlConverter\HtmlParser.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\HtmlConverter\HtmlSchema.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\HtmlConverter\HtmlTokenType.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\HtmlConverter\HtmlToXamlConverter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\IDocumentFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ObjectFormatters\AccountTransactionDocumentFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ObjectFormatters\EntityFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrinterService.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobExecutor.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\AbstractPrintJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\CustomPrinterJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\DemoPrinterJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\HtmlPrinterJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\PortPrinterJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\PrintJobFactory.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\RawPrinterJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\SlipPrinterJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\TextPrinterJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\PrintJobs\WindowsPrinterJob.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ReportPrinter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\TagData.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\TicketFormatter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\TicketPrinter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\TicketPrintTask.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\TicketPrintTaskBuilder.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Tools\LinePrinter.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Tools\PrinterHelper.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Tools\PrinterInfo.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Tools\PrinterTools.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\Tools\RawPrinterHelper.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\AbstractValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\AccountTransactionDocumentValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\AccountTransactionValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\ChangePaymentValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\EntityValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\FunctionData.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\FunctionRegistry.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\Helper.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\HumanFriendlyInteger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\IValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\OrderStateValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\OrderTagValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\OrderValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\PaymentValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\PostCalculationValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\PreCalculationValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\TagNames.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\TaxValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\TicketEntityValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\PrinterModule\ValueChangers\TicketValueChanger.cs" />
+    <Compile Include="CommonServices\Implementations\ReportService.cs" />
+    <Compile Include="CommonServices\Implementations\SettingsModule\ProgramSetting.cs" />
+    <Compile Include="CommonServices\Implementations\SettingsModule\ProgramSettings.cs" />
+    <Compile Include="CommonServices\Implementations\SettingsModule\SettingReplacer.cs" />
+    <Compile Include="CommonServices\Implementations\SettingsModule\SettingService.cs" />
+    <Compile Include="CommonServices\Implementations\TicketModule\TicketExplorerFilter.cs" />
+    <Compile Include="CommonServices\Implementations\TicketModule\TicketServiceBase.cs" />
+    <Compile Include="CommonServices\INotificationService.cs" />
+    <Compile Include="CommonServices\IPriceListService.cs" />
+    <Compile Include="CommonServices\IPrinterService.cs" />
+    <Compile Include="CommonServices\IReportService.cs" />
+    <Compile Include="CommonServices\ISettingService.cs" />
+    <Compile Include="CommonServices\ITicketServiceBase.cs" />
+    <Compile Include="Common\AbstractService.cs" />
     <Compile Include="Common\AppScreenChangeData.cs" />
     <Compile Include="Common\AppScreens.cs" />
-    <Compile Include="Common\EventParameters.cs" />
-    <Compile Include="Common\EventServiceExtensions.cs" />
+    <Compile Include="Common\AppServices.cs" />
+    <Compile Include="Common\DataGeneration\DataCreationService.cs" />
+    <Compile Include="Common\DataGeneration\EntityCreator.cs" />
+    <Compile Include="Common\DataGeneration\ParameterBuilder.cs" />
+    <Compile Include="Common\DataGeneration\RuleGenerator.cs" />
     <Compile Include="Common\EventServiceFactory.cs" />
     <Compile Include="Common\EventTopicNames.cs" />
+    <Compile Include="Common\ExtensionMethods.cs" />
     <Compile Include="Common\GenericEvent.cs" />
+    <Compile Include="Common\IPresentationService.cs" />
+    <Compile Include="Common\OperationRequest.cs" />
     <Compile Include="Common\PermissionNames.cs" />
     <Compile Include="Common\PermissionRegistry.cs" />
-    <Compile Include="Common\PublishEventDelegate.cs" />
     <Compile Include="IApplicationState.cs" />
     <Compile Include="IApplicationStateSetter.cs" />
+    <Compile Include="IEntityServiceClient.cs" />
+    <Compile Include="IInventoryService.cs" />
+    <Compile Include="IMethodQueue.cs" />
+    <Compile Include="Implementations\AutomationModule\TriggerService.cs" />
+    <Compile Include="Implementations\EntityModule\EntityServiceClient.cs" />
+    <Compile Include="Implementations\InventoryModule\InventoryService.cs" />
+    <Compile Include="Implementations\MethodQueue.cs" />
+    <Compile Include="Implementations\ReportServiceClient.cs" />
+    <Compile Include="Implementations\TaskModule\ITokenParser.cs" />
+    <Compile Include="Implementations\TaskModule\Parsers\DateTimeParser.cs" />
+    <Compile Include="Implementations\TaskModule\Parsers\ExpressionParser.cs" />
+    <Compile Include="Implementations\TaskModule\TaskCache.cs" />
+    <Compile Include="Implementations\TaskModule\TaskParser.cs" />
+    <Compile Include="Implementations\TaskModule\TaskService.cs" />
+    <Compile Include="Implementations\TicketModule\TicketService.cs" />
+    <Compile Include="Implementations\UserModule\UserService.cs" />
+    <Compile Include="Implementations\WorkPeriodModule\WorkPeriodService.cs" />
+    <Compile Include="IReportServiceClient.cs" />
+    <Compile Include="ITaskService.cs" />
+    <Compile Include="ITicketService.cs" />
+    <Compile Include="ITriggerService.cs" />
+    <Compile Include="IUserService.cs" />
+    <Compile Include="IWorkPeriodService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SamplePrism.Domain\SamplePrism.Domain.csproj">
+      <Project>{DDF39B0E-06A4-44FB-8CBA-762C9FF8B4DD}</Project>
+      <Name>SamplePrism.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Infrastructure.Data\SamplePrism.Infrastructure.Data.csproj">
+      <Project>{2fdf3248-e800-4adc-92ea-09a9837694f7}</Project>
+      <Name>SamplePrism.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Infrastructure\SamplePrism.Infrastructure.csproj">
+      <Project>{71128390-CB78-4362-8E9F-962E6A5195C2}</Project>
+      <Name>SamplePrism.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Localization\SamplePrism.Localization.csproj">
+      <Project>{F214A5E2-8782-420A-81A6-DC082C1C2E93}</Project>
+      <Name>SamplePrism.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Persistance\SamplePrism.Persistance.csproj">
+      <Project>{7F49A8D3-B5D3-406A-8A70-B1F610E57A0E}</Project>
+      <Name>SamplePrism.Persistance</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

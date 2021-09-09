@@ -1,161 +1,132 @@
-﻿using Infrastructure.ExceptionReporter;
-using Microsoft.Win32;
-using Prism.Mvvm;
-using SamplePrism.Presentation.Common.Commands;
-using SamplePrism.Presentation.Common.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using Microsoft.Win32;
+using SamplePrism.Infrastructure.ExceptionReporter;
+using SamplePrism.Localization.Properties;
+using SamplePrism.Presentation.Common.Commands;
 
-namespace SamplePrism.Presentation.Common
+namespace SamplePrism.Presentation.Common.ErrorReport
 {
-    internal class ErrorReportViewModel : BindableBase
+    class ErrorReportViewModel : ObservableObject
     {
-        public ErrorReportViewModel(IEnumerable<Exception> exceptions)
-        {
-            Model = new ExceptionReportInfo { AppAssembly = Assembly.GetCallingAssembly() };
-            Model.SetExceptions(exceptions);
-            CopyCommand = new CaptionCommand<string>("复制", Copy);
-            SaveCommand = new CaptionCommand<string>("保存", Save);
-            SubmitCommand = new CaptionCommand<string>("提交", Submit);
-            CloseCommand = new CaptionCommand<string>("关闭", Close);
-        }
-
-        private bool? m_dialogResult;
+        private bool? _dialogResult;
         public bool? DialogResult
         {
-            get { return m_dialogResult; }
-            set { SetProperty(ref m_dialogResult, value); }
+            get { return _dialogResult; }
+            set
+            {
+                _dialogResult = value;
+                RaisePropertyChanged(nameof(DialogResult));
+            }
         }
 
         public ExceptionReportInfo Model { get; set; }
 
-        public CaptionCommand<string> CopyCommand { get; private set; }
-
-        public CaptionCommand<string> SaveCommand { get; private set; }
-
-        public CaptionCommand<string> SubmitCommand { get; private set; }
-
-        public CaptionCommand<string> CloseCommand { get; private set; }
-
-        private string m_errorReportAsText;
-        public string ErrorReportAsText
+        public ErrorReportViewModel(IEnumerable<Exception> exceptions)
         {
-            get
-            {
-                if (m_errorReportAsText == null)
-                {
-                    m_errorReportAsText = GenerateReport();
-                }
-                return m_errorReportAsText;
-            }
-            set
-            {
-                m_errorReportAsText = value;
-            }
+            Model = new ExceptionReportInfo { AppAssembly = Assembly.GetCallingAssembly() };
+            Model.SetExceptions(exceptions);
+
+            CopyCommand = new CaptionCommand<string>(Resources.Copy, OnCopyCommand);
+            SaveCommand = new CaptionCommand<string>(Resources.Save, OnSaveCommand);
+            SubmitCommand = new CaptionCommand<string>(Resources.Send, OnSubmitCommand);
         }
 
-
-        public string ErrorMessage
+        private void OnSubmitCommand(string obj)
         {
-            get { return Model.UserExplanation; }
-            set
+            if (string.IsNullOrEmpty(UserMessage))
             {
-                Model.UserExplanation = value;
-                m_errorReportAsText = string.Empty;
-                RaisePropertyChanged(nameof(ErrorReportAsText));
+                if (MessageBox.Show(Resources.ErrorReportWithoutFeedback, Resources.Information, MessageBoxButton.YesNo) == MessageBoxResult.No) return;
             }
-        }
-
-        public string UserMessage
-        {
-            get
-            {
-                return Model.UserExplanation;
-            }
-            set
-            {
-                Model.UserExplanation = value;
-                m_errorReportAsText = null;
-                RaisePropertyChanged(nameof(ErrorReportAsText));
-            }
-        }
-
-        private void Submit(string obj)
-        {
-            if (string.IsNullOrEmpty(UserMessage) && !InteractionService.UserIntraction.AskQuestion(""))
-            {
-                return;
-            }
-            //DialogResult = false;
+            DialogResult = false;
             SubmitError();
         }
 
         public void SubmitError()
         {
-            //TODO: 向指定网址提交错误日志
+            var tempFile = Path.GetTempFileName().Replace(".tmp", ".txt");
+            SaveReportToFile(tempFile);
+            string queryString = string.Format("from={0}&emaila={1}&file={2}",
+                Uri.EscapeDataString("info@sambapos.com"),
+                Uri.EscapeDataString("SambaPOS V3 Error Report"),
+                Uri.EscapeDataString(tempFile));
+
+            var c = new WebClient();
+            var result = c.UploadFile("http://reports.sambapos.com/file.php?" + queryString, "POST", tempFile);
+            MessageBox.Show(Encoding.ASCII.GetString(result));
         }
 
-        private void Save(string obj)
+        private void OnSaveCommand(string obj)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            bool result = saveFileDialog.ShowDialog().GetValueOrDefault();
-            if (result)
-            {
-                string fileName = saveFileDialog.FileName;
-                if (!string.IsNullOrEmpty(fileName))
-                {
-                    SaveReportToFile(fileName);
-                }
-            }
+            var sf = new SaveFileDialog();
+            var fn = sf.FileName;
+            if (!string.IsNullOrEmpty(fn))
+                SaveReportToFile(fn);
         }
 
-        private void Copy(string obj)
+        private void OnCopyCommand(object obj)
         {
             Clipboard.SetText(ErrorReportAsText);
         }
 
-        private void Close(string obj)
+        public ICaptionCommand CopyCommand { get; set; }
+        public ICaptionCommand SaveCommand { get; set; }
+        public ICaptionCommand SubmitCommand { get; set; }
+        public ICaptionCommand CloseCommand { get; set; }
+
+        private string _errorReportAsText;
+        public string ErrorReportAsText
         {
-            this.DialogResult = true;
+            get { return _errorReportAsText ?? (_errorReportAsText = GenerateReport()); }
+            set { _errorReportAsText = value; }
+        }
+
+        public string ErrorMessage { get { return Model.MainException.Message; } }
+
+        public string UserMessage
+        {
+            get { return Model.UserExplanation; }
+            set
+            {
+                Model.UserExplanation = value;
+                _errorReportAsText = null;
+                RaisePropertyChanged(nameof(ErrorReportAsText));
+            }
         }
 
         private string GenerateReport()
         {
-            ExceptionReportGenerator exceptionReportGenerator = new ExceptionReportGenerator(Model);
-            return exceptionReportGenerator.CreateExceptionReport();
+            var rg = new ExceptionReportGenerator(Model);
+            return rg.CreateExceptionReport();
         }
 
         public string GetErrorReport()
         {
-            m_errorReportAsText = string.Empty;
+            _errorReportAsText = null;
             return ErrorReportAsText;
         }
 
         public void SaveReportToFile(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(fileName)) return;
 
             try
             {
-                using (FileStream stream = File.OpenWrite(fileName))
+                using (var stream = File.OpenWrite(fileName))
                 {
-                    StreamWriter writer = new StreamWriter(stream);
+                    var writer = new StreamWriter(stream);
                     writer.Write(ErrorReportAsText);
                     writer.Flush();
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                InteractionService.UserIntraction.GiveFeedBack(string.Format("Unable to save file '{0}' : {1}", fileName, ex.Message));
+                MessageBox.Show(string.Format("Unable to save file '{0}' : {1}", fileName, exception.Message));
             }
         }
     }

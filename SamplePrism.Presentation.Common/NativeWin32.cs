@@ -59,7 +59,7 @@ namespace SamplePrism.Presentation.Common
 
         [DllImport("user32")]
         public static extern bool PostMessage(IntPtr hwnd, int msg, IntPtr wparam, IntPtr lparam);
-
+        
         [DllImport("user32")]
         public static extern int RegisterWindowMessage(string message);
 
@@ -504,7 +504,7 @@ namespace SamplePrism.Presentation.Common
 
         public const int WM_MOUSEACTIVATE = 0x0021;
         public const int MA_NOACTIVATE = 3;
-
+        
         /// <summary>
         /// Does not activate the window. If this flag is not set, the
         /// window is activated and moved to the top of either the

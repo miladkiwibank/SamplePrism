@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
@@ -7,17 +7,25 @@ namespace SamplePrism.Presentation.Controls.Converters
 {
     public class VisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture)
         {
-            bool flag = parameter == null || bool.Parse(parameter as string);
-            bool flag2 = (bool)value;
-            return (flag2 == flag) ? Visibility.Visible : Visibility.Collapsed;
+            var param = parameter != null ? bool.Parse(parameter as string) : true;
+            var val = (bool)value;
+            return val == param ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(
+            object value,
+            Type targetType,
+            object parameter,
+            CultureInfo culture)
         {
-            Visibility visibility = (Visibility)value;
-            return visibility == Visibility.Visible;
+            var visibility = (Visibility)value;
+            return (visibility == Visibility.Visible);
         }
     }
 }

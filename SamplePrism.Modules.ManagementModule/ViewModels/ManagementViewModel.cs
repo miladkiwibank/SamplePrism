@@ -24,7 +24,7 @@ namespace SamplePrism.Modules.ManagementModule.ViewModels
             }
         }
 
-        protected override string GetHeader()
+        protected override string GetHeaderInfo()
         {
             return "Dashboard";
         }

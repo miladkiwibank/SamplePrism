@@ -1,49 +1,44 @@
-﻿using SamplePrism.Presentation.Services.Common;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
+using SamplePrism.Presentation.Services.Common;
 
 namespace SamplePrism.Presentation.Common.ModelBase
 {
     public abstract class ModelListViewModelBase : ViewModelBase
     {
-        public ModelListViewModelBase()
+        public ObservableCollection<VisibleViewModelBase> Views { get; set; }
+
+        protected ModelListViewModelBase()
         {
             Views = new ObservableCollection<VisibleViewModelBase>();
             AttachEvents();
         }
 
-        public ObservableCollection<VisibleViewModelBase> Views { get; set; }
-
         private void AttachEvents()
         {
-            EventServiceFactory.EventService.GetEvent<GenericEvent<VisibleViewModelBase>>()
-                .Subscribe(x =>
+            EventServiceFactory.EventService.GetEvent<GenericEvent<VisibleViewModelBase>>().Subscribe(
+                s =>
                 {
-                    if (x.Topic == EventTopicNames.ViewClosed)
+                    if (s.Topic == EventTopicNames.ViewClosed)
                     {
-                        if (x.Value != null)
+                        if (s.Value != null)
                         {
-                            if (Views.Contains(x.Value))
-                                Views.Remove(x.Value);
-                            if (x.Value.CallingView != null)
-                                SetActiveView(Views, x.Value.CallingView);
-                            x.Value.OnClosed();
-                            x.Value.CallingView = null;
-                            x.Value.Dispose();
+                            if (Views.Contains(s.Value))
+                                Views.Remove(s.Value);
+                            if (s.Value.CallingView != null)
+                                SetActiveView(Views, s.Value.CallingView);
+                            s.Value.OnClosed();
+                            s.Value.CallingView = null;
+                            s.Value.Dispose();
                         }
                     }
 
-                    if (x.Topic == EventTopicNames.ViewAdded && x.Value != null)
+                    if (s.Topic == EventTopicNames.ViewAdded && s.Value != null)
                     {
-                        x.Value.CallingView = GetActiveView(Views);
-                        if (!Views.Contains(x.Value))
-                            Views.Add(x.Value);
-                        SetActiveView(Views, x.Value);
-                        x.Value.OnShown();
+                        s.Value.CallingView = GetActiveView(Views);
+                        if (!Views.Contains(s.Value))
+                            Views.Add(s.Value);
+                        SetActiveView(Views, s.Value);
+                        s.Value.OnShown();
                     }
                 });
         }

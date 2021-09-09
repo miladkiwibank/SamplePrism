@@ -1,28 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace SamplePrism.Presentation.Common.ModelBase
 {
     /// <summary>
-    /// GenericEntityView.xaml 的交互逻辑
+    /// Interaction logic for GenericEntityView.xaml
     /// </summary>
     public partial class GenericEntityView : UserControl
     {
         public GenericEntityView()
         {
             InitializeComponent();
+        }
+
+        private void MainGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var fe = (sender as FrameworkElement);
+            if (fe != null)
+            {
+                var bm = (fe.DataContext as IEditableCollection);
+                if (bm != null && bm.EditItemCommand.CanExecute(null))
+                    bm.EditItemCommand.Execute(null);
+            }
+        }
+
+        private void MainGrid_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var fe = (sender as FrameworkElement);
+                if (fe != null && ((IEditableCollection)fe.DataContext).EditItemCommand.CanExecute(null))
+                    ((IEditableCollection)fe.DataContext).EditItemCommand.Execute(null);
+            }
         }
     }
 }

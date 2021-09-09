@@ -1,81 +1,86 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace SamplePrism.Presentation.Common.ModelBase
 {
     /// <summary>
-    /// EntityCollectionBaseView.xaml 的交互逻辑
+    /// Interaction logic for EntityCollectionBaseView.xaml
     /// </summary>
     public partial class EntityCollectionBaseView : UserControl
     {
-        private readonly Timer m_updateTimer;
-        private string m_beforeText;
+        private readonly Timer _updateTimer;
+        private string _beforeText;
 
         public EntityCollectionBaseView()
         {
             InitializeComponent();
-            m_updateTimer = new Timer(500);
-            m_updateTimer.Elapsed += UpdateTimerElapsed;
+            _updateTimer = new Timer(500);
+            _updateTimer.Elapsed += UpdateTimerElapsed;
         }
 
         private void UpdateTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            m_updateTimer.Stop();
+            _updateTimer.Stop();
 
             Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(RefreshItems));
         }
 
         private void RefreshItems()
         {
-            if (FilterTextBox.Text != m_beforeText)
-                ((EntityCollectionViewModelBase)DataContext).RefreshItems();
+            if (FilterTextBox.Text != _beforeText)
+                ((AbstractEntityCollectionViewModelBase)DataContext).RefreshItems();
         }
 
         private void MainGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (DataContext is EntityCollectionViewModelBase bm && bm.EditItemCommand.CanExecute(null))
+            var bm = (DataContext as AbstractEntityCollectionViewModelBase);
+            if (bm != null && bm.EditItemCommand.CanExecute(null))
                 bm.EditItemCommand.Execute(null);
+        }
+
+        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var baseModelView = DataContext as AbstractEntityCollectionViewModelBase;
+            if (baseModelView != null && baseModelView.CustomCommands.Count > 0)
+            {
+                MainGrid.ContextMenu.Items.Add(new Separator());
+                foreach (var item in ((AbstractEntityCollectionViewModelBase)DataContext).CustomCommands)
+                {
+                    MainGrid.ContextMenu.Items.Add(
+                        new MenuItem { Command = item, Header = item.Caption });
+                }
+            }
         }
 
         private void MainGrid_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
-                if (((EntityCollectionViewModelBase)DataContext).EditItemCommand.CanExecute(null))
-                    ((EntityCollectionViewModelBase)DataContext).EditItemCommand.Execute(null);
+                if (((AbstractEntityCollectionViewModelBase)DataContext).EditItemCommand.CanExecute(null))
+                    ((AbstractEntityCollectionViewModelBase)DataContext).EditItemCommand.Execute(null);
             }
         }
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            m_updateTimer.Stop();
+            _updateTimer.Stop();
             if (e.Key == Key.Enter)
             {
-                ((EntityCollectionViewModelBase)DataContext).RefreshItems();
+                ((AbstractEntityCollectionViewModelBase)DataContext).RefreshItems();
                 FilterTextBox.SelectAll();
             }
             else if (e.Key == Key.Down)
             {
-                //MainGrid.BackgroundFocus();
+                MainGrid.BackgroundFocus();
             }
             else
             {
-                m_beforeText = FilterTextBox.Text;
-                m_updateTimer.Start();
+                _beforeText = FilterTextBox.Text;
+                _updateTimer.Start();
             }
         }
     }

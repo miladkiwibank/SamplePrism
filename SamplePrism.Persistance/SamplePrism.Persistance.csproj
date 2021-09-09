@@ -46,7 +46,11 @@
     <Reference Include="MySql.Data.Entity.EF6, Version=6.9.12.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.Entity.6.9.12\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
     </Reference>
+    <Reference Include="Omu.ValueInjecter, Version=2.3.3.0, Culture=neutral, PublicKeyToken=c7694541b0ac80e4, processorArchitecture=MSIL">
+      <HintPath>..\packages\valueinjecter.2.3.3\lib\net35\Omu.ValueInjecter.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,15 +61,82 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\BalanceValue.cs" />
+    <Compile Include="Common\ITicketExplorerFilter.cs" />
+    <Compile Include="Common\MenuItemData.cs" />
+    <Compile Include="Common\OpenTicketData.cs" />
+    <Compile Include="Common\PriceData.cs" />
+    <Compile Include="Common\TicketCommitResult.cs" />
     <Compile Include="DataContext.cs" />
+    <Compile Include="Data\CachedDao.cs" />
+    <Compile Include="Data\Dao.cs" />
+    <Compile Include="Data\DataContext.cs" />
+    <Compile Include="Data\WorkspaceFactory.cs" />
+    <Compile Include="IAccountDao.cs" />
+    <Compile Include="IAutomationDao.cs" />
+    <Compile Include="ICacheDao.cs" />
+    <Compile Include="IEntityDao.cs" />
+    <Compile Include="IInventoryDao.cs" />
+    <Compile Include="IMenuDao.cs" />
+    <Compile Include="Implementations\AccountDao.cs" />
+    <Compile Include="Implementations\AutomationDao.cs" />
+    <Compile Include="Implementations\CacheDao.cs" />
+    <Compile Include="Implementations\EntityDao.cs" />
+    <Compile Include="Implementations\InventoryDao.cs" />
+    <Compile Include="Implementations\MenuDao.cs" />
+    <Compile Include="Implementations\PriceListDao.cs" />
+    <Compile Include="Implementations\PrinterDao.cs" />
+    <Compile Include="Implementations\SettingDao.cs" />
+    <Compile Include="Implementations\TaskDao.cs" />
+    <Compile Include="Implementations\TicketDao.cs" />
+    <Compile Include="Implementations\UserDao.cs" />
+    <Compile Include="Implementations\WorkPeriodDao.cs" />
+    <Compile Include="IPriceListDao.cs" />
+    <Compile Include="IPrinterDao.cs" />
+    <Compile Include="ISettingDao.cs" />
+    <Compile Include="ITaskDao.cs" />
+    <Compile Include="ITicketDao.cs" />
+    <Compile Include="IUserDao.cs" />
+    <Compile Include="IWorkPeriodDao.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Specification\AndSpecification.cs" />
+    <Compile Include="Specification\CompositeSpecification.cs" />
+    <Compile Include="Specification\DirectSpecification.cs" />
+    <Compile Include="Specification\EntitySpecifications.cs" />
+    <Compile Include="Specification\ExpressionBuilder.cs" />
+    <Compile Include="Specification\ISpecification.cs" />
+    <Compile Include="Specification\NonDuplicateSaveValidator.cs" />
+    <Compile Include="Specification\NotSpecification.cs" />
+    <Compile Include="Specification\OrSpecification.cs" />
+    <Compile Include="Specification\ParametersRebinder.cs" />
+    <Compile Include="Specification\Specification.cs" />
+    <Compile Include="Specification\SpecificationDaoExtentions.cs" />
+    <Compile Include="Specification\TrueSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SamplePrism.Domain\SamplePrism.Domain.csproj">
+      <Project>{DDF39B0E-06A4-44FB-8CBA-762C9FF8B4DD}</Project>
+      <Name>SamplePrism.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Infrastructure.Data\SamplePrism.Infrastructure.Data.csproj">
+      <Project>{2FDF3248-E800-4ADC-92EA-09A9837694F7}</Project>
+      <Name>SamplePrism.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Infrastructure\SamplePrism.Infrastructure.csproj">
+      <Project>{71128390-CB78-4362-8E9F-962E6A5195C2}</Project>
+      <Name>SamplePrism.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Localization\SamplePrism.Localization.csproj">
+      <Project>{F214A5E2-8782-420A-81A6-DC082C1C2E93}</Project>
+      <Name>SamplePrism.Localization</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

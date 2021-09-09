@@ -1,44 +1,14 @@
-﻿using Prism.Commands;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Prism.Commands;
+using SamplePrism.Presentation.Common.Annotations;
 
 namespace SamplePrism.Presentation.Common.Commands
 {
-    public class CaptionCommand : DelegateCommand, ICommand, ICaptionCommand
+    public class CaptionCommand<T> : DelegateCommand<T>, ICaptionCommand, INotifyPropertyChanged
     {
-        public CaptionCommand(string caption, Action executeMethod)
-            : base(executeMethod)
-        {
-            Caption = caption;
-        }
-
-        public CaptionCommand(string caption, Action executeMethod, Func<bool> canExecuteMethod)
-            : base(() => executeMethod(), () => canExecuteMethod())
-        {
-            Caption = caption;
-        }
-
-        public string Caption { get; set; }
-
-        public new event EventHandler CanExecuteChanged
-        {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
-    }
-
-    public class CaptionCommand<T> : DelegateCommand<T>, ICommand, ICaptionCommand
-    {
-        public CaptionCommand(string caption, Action<T> executeMethod, Func<T, bool> canExecuteMethod)
-            : base(executeMethod, canExecuteMethod)
-        {
-            Caption = caption;
-        }
+        private string _caption;
 
         public CaptionCommand(string caption, Action<T> executeMethod)
             : base(executeMethod)
@@ -46,12 +16,32 @@ namespace SamplePrism.Presentation.Common.Commands
             Caption = caption;
         }
 
-        public string Caption { get; set; }
+        public CaptionCommand(string caption, Action<T> executeMethod, Func<T, bool> canExecuteMethod)
+            : base(executeMethod, canExecuteMethod)
+        {
+            Caption = caption;
+
+        }
+
+        public string Caption
+        {
+            get { return _caption; }
+            set { _caption = value; OnPropertyChanged("Caption"); }
+        }
 
         public new event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

@@ -1,17 +1,10 @@
-﻿using SamplePrism.Presentation.Common.Commands;
-using SamplePrism.Presentation.Services.Common;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SamplePrism.Presentation.Common.Commands;
+using SamplePrism.Presentation.Services.Common;
 
 namespace SamplePrism.Presentation.Common.Services
 {
-    /// <summary>
-    /// 展示层菜单命令服务
-    /// </summary>
     public static class PresentationServices
     {
         public static ObservableCollection<ICategoryCommand> NavigationCommandCategories { get; private set; }
@@ -24,22 +17,22 @@ namespace SamplePrism.Presentation.Common.Services
             EventServiceFactory.EventService.GetEvent<GenericEvent<ICategoryCommand>>().Subscribe(OnCommandAdded);
         }
 
-        private static void OnCommandAdded(EventParameters<ICategoryCommand> parameters)
+        private static void OnCommandAdded(EventParameters<ICategoryCommand> result)
         {
-            if (parameters.Topic == EventTopicNames.NavigationCommandAdded)
-                NavigationCommandCategories.Add(parameters.Value);
+            if (result.Topic == EventTopicNames.NavigationCommandAdded)
+                NavigationCommandCategories.Add(result.Value);
 
-            if (parameters.Topic == EventTopicNames.DashboardCommandAdded)
+            if (result.Topic == EventTopicNames.DashboardCommandAdded)
             {
-                var category = DashboardCommandCategories.FirstOrDefault(x => x.Category == parameters.Value.Category);
-                if (category == null)
+                var cat = DashboardCommandCategories.FirstOrDefault(item => item.Category == result.Value.Category);
+                if (cat == null)
                 {
-                    category = new DashboardCommandCategory(parameters.Value.Category);
-                    DashboardCommandCategories.Add(category);
+                    cat = new DashboardCommandCategory(result.Value.Category);
+                    DashboardCommandCategories.Add(cat);
                 }
-                if (parameters.Value.Order > category.Order)
-                    category.Order = parameters.Value.Order;
-                category.AddCommand(parameters.Value);
+                if (result.Value.Order > cat.Order)
+                    cat.Order = result.Value.Order;
+                cat.AddCommand(result.Value);
             }
         }
     }

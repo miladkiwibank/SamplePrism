@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{71128390-CB78-4362-8E9F-962E6A5195C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SamplePrism.Infrastructure</RootNamespace>
+    <AssemblyName>SamplePrism.Infrastructure</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cron\CronBuilder.cs" />
+    <Compile Include="Cron\CronEntryBase.cs" />
+    <Compile Include="Cron\CronEntryException.cs" />
+    <Compile Include="Cron\CronExpression.cs" />
+    <Compile Include="Cron\CronObject.cs" />
+    <Compile Include="Cron\CronObjectDataContext.cs" />
+    <Compile Include="Cron\CronSchedule.cs" />
+    <Compile Include="Cron\DaysCronEntry.cs" />
+    <Compile Include="Cron\DaysOfWeekCronEntry.cs" />
+    <Compile Include="Cron\HoursCronEntry.cs" />
+    <Compile Include="Cron\ICronEntry.cs" />
+    <Compile Include="Cron\MinutesCronEntry.cs" />
+    <Compile Include="Cron\MonthsCronEntry.cs" />
+    <Compile Include="ExceptionReporter\Disposable.cs" />
+    <Compile Include="ExceptionReporter\ExceptionReportBuilder.cs" />
+    <Compile Include="ExceptionReporter\ExceptionReportGenerator.cs" />
+    <Compile Include="ExceptionReporter\ExceptionReportGeneratorException.cs" />
+    <Compile Include="ExceptionReporter\ExceptionReportInfo.cs" />
+    <Compile Include="ExceptionReporter\Logger.cs" />
+    <Compile Include="ExceptionReporter\SystemInfo\SysInfoQueries.cs" />
+    <Compile Include="ExceptionReporter\SystemInfo\SysInfoQuery.cs" />
+    <Compile Include="ExceptionReporter\SystemInfo\SysInfoResult.cs" />
+    <Compile Include="ExceptionReporter\SystemInfo\SysInfoResultMapper.cs" />
+    <Compile Include="ExceptionReporter\SystemInfo\SysInfoRetriever.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Helpers\AlphanumComparator.cs" />
+    <Compile Include="Helpers\DateFuncParser.cs" />
+    <Compile Include="Helpers\JsonHelper.cs" />
+    <Compile Include="Helpers\QuantityFuncParser.cs" />
+    <Compile Include="Helpers\SerializableDictionary.cs" />
+    <Compile Include="Helpers\Utility.cs" />
+    <Compile Include="IMessageListener.cs" />
+    <Compile Include="IStringCompareable.cs" />
+    <Compile Include="Messaging\Messages.cs" />
+    <Compile Include="Messaging\MessagingClient.cs" />
+    <Compile Include="Messaging\MessagingClientObject.cs" />
+    <Compile Include="Messaging\MessagingServerObject.cs" />
+    <Compile Include="Messaging\Observer.cs" />
+    <Compile Include="Network\TelnetExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\LocalSettings.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

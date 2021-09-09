@@ -1,7 +1,7 @@
-﻿using SamplePrism.Presentation.Common;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Interop;
+using SamplePrism.Presentation.Common;
 
 namespace SamplePrism.Presentation.Controls.Interaction
 {

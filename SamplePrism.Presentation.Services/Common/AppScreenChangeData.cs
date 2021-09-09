@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace SamplePrism.Presentation.Services.Common
 {
@@ -13,7 +9,6 @@ namespace SamplePrism.Presentation.Services.Common
             PreviousScreen = pre;
             CurrentScreen = next;
         }
-
         public AppScreens PreviousScreen { get; set; }
         public AppScreens CurrentScreen { get; set; }
     }

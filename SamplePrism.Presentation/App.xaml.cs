@@ -16,6 +16,7 @@ using System.IO;
 using SamplePrism.Presentation.Common;
 using SamplePrism.Presentation.Common.Services;
 using Microsoft.Practices.ServiceLocation;
+using SamplePrism.Presentation.Common.ErrorReport;
 
 namespace SamplePrism.Presentation
 {
@@ -55,7 +56,7 @@ namespace SamplePrism.Presentation
 
         private void LoadCustomDirectory()
         {
-            throw new NotImplementedException();
+            
         }
 
         private void RunInDebugMode()

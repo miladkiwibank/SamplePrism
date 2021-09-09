@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
@@ -60,24 +56,24 @@ namespace SamplePrism.Presentation.Common
             obj.SetValue(NameScopeSourceProperty, value);
         }
 
-        public static readonly DependencyProperty
+        public static readonly DependencyProperty 
             NameScopeSourceProperty =
             DependencyProperty.RegisterAttached(
-            "NameScopeSource",
+            "NameScopeSource", 
             typeof(ElementSpy),
-            typeof(ElementSpy),
+            typeof(ElementSpy), 
             new UIPropertyMetadata(
                 null, OnNameScopeSourceChanged));
 
         static void OnNameScopeSourceChanged(
-            DependencyObject depObj,
+            DependencyObject depObj, 
             DependencyPropertyChangedEventArgs e)
         {
             ElementSpy spy = e.NewValue as ElementSpy;
             if (spy == null || spy.Element == null)
                 return;
 
-            INameScope scope =
+            INameScope scope = 
                 NameScope.GetNameScope(spy.Element);
             if (scope == null)
                 return;

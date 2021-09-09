@@ -18,21 +18,9 @@
         <ItemsControl Grid.Row="1" ItemsSource="{Binding PopupList}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <!--Style="{StaticResource ItemsControlButtonStyle}"-->
-                    <Button  Focusable="False"
+                    <Button Style="{StaticResource ItemsControlButtonStyle}" Focusable="False"
                             Command="{Binding DataContext.ClickButtonCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ItemsControl}}}"
                             CommandParameter="{Binding}" Name="btn">
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type Button}">
-                                            <ContentPresenter HorizontalAlignment="Stretch"/>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </Button.Style>
                         <Border Focusable="False" Height="150" BorderBrush="{Binding HeaderColor}" Visibility="Hidden" BorderThickness="2" Name="Brd" CornerRadius="3" Margin="1">
                             <Border.Background>
                                 <LinearGradientBrush EndPoint="0.504,1.5" StartPoint="0.504,0.03">

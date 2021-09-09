@@ -1,41 +1,37 @@
-﻿using Prism.Commands;
-using SamplePrism.Presentation.Services.Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SamplePrism.Presentation.Common;
-using SamplePrism.Presentation.Common.Commands;
-using SamplePrism.Presentation.Common.Services;
+using System.Windows;
 using FluentValidation;
-using Infrastructure.Data.Entity;
-using Infrastructure.Data.Validation;
+using SamplePrism.Infrastructure.Data;
+using SamplePrism.Infrastructure.Data.Validation;
+using SamplePrism.Localization.Properties;
+using SamplePrism.Presentation.Common.Commands;
+using SamplePrism.Presentation.Services.Common;
 
 namespace SamplePrism.Presentation.Common.ModelBase
 {
-    public abstract class EntityViewModelBase<TModel> : VisibleViewModelBase
-        where TModel : class, IEntity, new()
+    public abstract class EntityViewModelBase<TModel> : VisibleViewModelBase where TModel : class, IEntityClass
     {
-        private bool m_modelSaved;
-        private IValidator<TModel> m_validator;
+        private bool _modelSaved;
+        private IValidator<TModel> _validator;
 
         protected EntityViewModelBase()
         {
-
+            SaveCommand = new CaptionCommand<string>(Resources.Save, OnSave, CanSave);
         }
 
         [Browsable(false)]
         public TModel Model { get; set; }
 
         [Browsable(false)]
-        public ICaptionCommand CaptionCommand { get; private set; }
+        public ICaptionCommand SaveCommand { get; private set; }
 
         [Browsable(false)]
         public string ErrorMessage { get; set; }
 
+        protected IWorkspace Workspace { get; private set; }
 
+        [Browsable(false)]
         public string Name
         {
             get { return Model.Name; }
@@ -46,33 +42,37 @@ namespace SamplePrism.Presentation.Common.ModelBase
             }
         }
 
-        private string m_error;
+        private string _error;
 
         [Browsable(false)]
         public string Error
         {
-            get { return m_error; }
+            get { return _error; }
             set
             {
-                m_error = value;
+                _error = value;
                 RaisePropertyChanged(nameof(Error));
             }
         }
 
         [Browsable(false)]
-        public string Fireground => GetForeground();
+        public string Foreground
+        {
+            get { return GetForeground(); }
+        }
 
         protected virtual string GetForeground()
         {
-            return "White";
+            return "Black";
         }
 
         public abstract string GetModelTypeString();
 
-        public void Initialize(TModel model)
+        public void Init(IWorkspace workspace, TModel model)
         {
-            m_modelSaved = false;
+            _modelSaved = false;
             Model = model;
+            Workspace = workspace;
             Initialize();
         }
 
@@ -83,39 +83,39 @@ namespace SamplePrism.Presentation.Common.ModelBase
 
         public override void OnShown()
         {
-            //base.OnShutdown();
-            m_modelSaved = false;
+            _modelSaved = false;
         }
 
         public override void OnClosed()
         {
-            //base.OnClosed();
-            if (!m_modelSaved)
+            if (!_modelSaved)
                 RollbackModel();
         }
 
-        protected override string GetHeader()
+        protected override string GetHeaderInfo()
         {
-            //if (Model.Id > 0)
-            //    return string.Format("编辑{0}", Name);
-            return string.Format("编辑");
+            if (Model.Id > 0)
+                return string.Format(Resources.EditModel_f, GetModelTypeString(), Name);
+            return string.Format(Resources.AddModel_f, GetModelTypeString());
         }
 
         protected virtual void OnSave(string value)
         {
             if (CanSave())
             {
-                m_modelSaved = true;
+                _modelSaved = true;
                 if (Model.Id == 0)
+                {
                     this.PublishEvent(EventTopicNames.AddedModelSaved);
+                }
                 this.PublishEvent(EventTopicNames.ModelAddedOrDeleted);
                 ((VisibleViewModelBase)this).PublishEvent(EventTopicNames.ViewClosed);
             }
             else
             {
                 if (string.IsNullOrEmpty(Name))
-                    ErrorMessage = string.Format("{0}", GetModelTypeString());
-                InteractionService.UserIntraction.GiveFeedBack("");
+                    ErrorMessage = string.Format(Resources.EmptyNameError, GetModelTypeString());
+                MessageBox.Show(ErrorMessage, Resources.CantSave);
                 ErrorMessage = "";
             }
         }
@@ -138,15 +138,14 @@ namespace SamplePrism.Presentation.Common.ModelBase
 
         private bool Validate()
         {
-            var validator = m_validator ?? (m_validator = GetValidator());
+            var validator = _validator ?? (_validator = GetValidator());
             var vs = validator.Validate(Model);
             if (!vs.IsValid)
             {
                 Error = string.Join("\r", vs.Errors.Select(x => x.ErrorMessage));
                 return false;
             }
-
-            Error = string.Empty;
+            Error = "";
             return true;
         }
 
@@ -159,18 +158,17 @@ namespace SamplePrism.Presentation.Common.ModelBase
         {
             if (Model.Id > 0)
             {
-                //TODO: Refresh model
+                Workspace.Refresh(Model);
                 RaisePropertyChanged(nameof(Name));
             }
         }
     }
 
-    public class EntityValidator<TModel> : AbstractValidator<TModel>
-        where TModel : IEntity
+    public class EntityValidator<TModel> : AbstractValidator<TModel> where TModel : IEntityClass
     {
         public EntityValidator()
         {
-            //RuleFor(x => x.Name).NotEmpty();
+            RuleFor(x => x.Name).NotEmpty();
         }
     }
 }

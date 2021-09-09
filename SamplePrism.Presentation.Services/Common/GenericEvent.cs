@@ -1,19 +1,15 @@
-﻿using Prism.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
+using Prism.Events;
 
 namespace SamplePrism.Presentation.Services.Common
 {
-    public class GenericEvent : PubSubEvent<EventParameters>
+    public class GenericEvent<TValue> : PubSubEvent<EventParameters<TValue>> { }
+    public class GenericIdEvent : PubSubEvent<EventParameters<int>> { }
+
+    public class EventParameters<TValue>
     {
-
-    }
-
-    public class GenericEvent<TValue> : PubSubEvent<EventParameters<TValue>>
-    {
-
+        public string Topic { get; set; }
+        public Action ExpectedAction { get; set; }
+        public TValue Value { get; set; }
     }
 }

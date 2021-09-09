@@ -1,40 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
+using SamplePrism.Infrastructure.Data;
 
 namespace SamplePrism.Presentation.Common
 {
     public interface IUserInteraction
     {
-        void ToggleSplashScreen();
+        string[] GetStringFromUser(string caption, string description);
+        string[] GetStringFromUser(string caption, string description, string defaultValue);
+        IList<IOrderable> ChooseValuesFrom(
+            IList<IOrderable> values,
+            IList<IOrderable> selectedValues,
+            string caption,
+            string description,
+            string singularName,
+            string pluralName);
 
-        //void ActivateSplashScreen();
-
-        /// <summary>
-        /// 弹出是否操作提示框
-        /// </summary>
-        /// <param name="question"></param>
-        /// <returns></returns>
+        void EditProperties(object item);
+        void EditProperties<T>(IList<T> item);
+        void SortItems(IEnumerable<IOrderable> list, string caption, string description);
         bool AskQuestion(string question);
-
-        /// <summary>
-        /// 弹出消息框
-        /// </summary>
-        /// <param name="message"></param>
-        void GiveFeedBack(string message);
-
-        /// <summary>
-        /// 右下角弹出提示
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="title"></param>
-        /// <param name="content"></param>
-        /// <param name="headerColor"></param>
-        /// <param name="action"></param>
-        /// <param name="actionParameter"></param>
-        void DisplayPopup(string name, string title, string content, string headerColor = "DarkRed",
-            Action<object> action = null, object actionParameter = null);
+        void GiveFeedback(string message);
+        void ShowKeyboard();
+        void HideKeyboard();
+        void ToggleKeyboard();
+        void ToggleSplashScreen();
+        void DisplayPopup(string name, string title, string content, string headerColor = "DarkRed", Action<object> action = null, object actionParameter = null);
+        void Scale(FrameworkElement control);
     }
 }

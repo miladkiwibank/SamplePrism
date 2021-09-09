@@ -64,17 +64,17 @@
     <Reference Include="Prism.Wpf, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\Prism.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="PropertyTools, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyTools.3.1.0\lib\net45\PropertyTools.dll</HintPath>
+    <Reference Include="PropertyTools">
+      <HintPath>..\Libs\PropertyTools.dll</HintPath>
     </Reference>
-    <Reference Include="PropertyTools.Wpf, Version=3.1.0.0, Culture=neutral, PublicKeyToken=ea0c9f2b460934d0, processorArchitecture=MSIL">
-      <HintPath>..\packages\PropertyTools.Wpf.3.1.0\lib\net45\PropertyTools.Wpf.dll</HintPath>
+    <Reference Include="PropertyTools.Wpf">
+      <HintPath>..\Libs\PropertyTools.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="stateless, Version=4.0.0.0, Culture=neutral, PublicKeyToken=93038f0927583c9a, processorArchitecture=MSIL">
       <HintPath>..\packages\stateless.5.11.0\lib\net45\stateless.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -95,11 +95,24 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionProcessors\AddLineToTextFile.cs" />
+    <Compile Include="ActionProcessors\Helper.cs" />
+    <Compile Include="ActionProcessors\LoopValues.cs" />
+    <Compile Include="ActionProcessors\ModifyVariable.cs" />
+    <Compile Include="ActionProcessors\RefreshCache.cs" />
+    <Compile Include="ActionProcessors\SendEmail.cs" />
+    <Compile Include="ActionProcessors\SetActiveTicketType.cs" />
+    <Compile Include="ActionProcessors\SetWidgetValue.cs" />
+    <Compile Include="ActionProcessors\StartProcess.cs" />
+    <Compile Include="ActionProcessors\UpdatePriceTag.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Commands\CaptionCommand.cs" />
     <Compile Include="Commands\CategoryCommand.cs" />
     <Compile Include="Commands\CommandCategory.cs" />
+    <Compile Include="Commands\CustomCommand.cs" />
     <Compile Include="Commands\ICaptionCommand.cs" />
     <Compile Include="Commands\ICategoryCommand.cs" />
+    <Compile Include="CommonEventPublisher.cs" />
     <Compile Include="DialogCloser.cs" />
     <Compile Include="ElementSpy.cs" />
     <Compile Include="ErrorReport\ErrorReportView.xaml.cs">
@@ -107,34 +120,39 @@
     </Compile>
     <Compile Include="ErrorReport\ErrorReportViewModel.cs" />
     <Compile Include="ErrorReport\ExceptionReporter.cs" />
+    <Compile Include="ExtensionServices.cs" />
     <Compile Include="IModuleInitializationService.cs" />
     <Compile Include="IUserInteraction.cs" />
+    <Compile Include="Message.cs" />
+    <Compile Include="MessageListener.cs" />
+    <Compile Include="MessageProcessor.cs" />
+    <Compile Include="ModelBase\AbstractEntityCollectionViewModelBase.cs" />
+    <Compile Include="ModelBase\AbstractMapViewModel.cs" />
     <Compile Include="ModelBase\EntityCollectionBaseView.xaml.cs">
       <DependentUpon>EntityCollectionBaseView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ModelBase\EntityCollectionSortManager.cs" />
     <Compile Include="ModelBase\EntityCollectionViewModelBase.cs" />
+    <Compile Include="ModelBase\EntityIdFixer.cs" />
     <Compile Include="ModelBase\EntityViewModelBase.cs" />
+    <Compile Include="ModelBase\EntityViewModelBaseWithMap.cs" />
     <Compile Include="ModelBase\GenericEntityView.xaml.cs">
       <DependentUpon>GenericEntityView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ModelBase\ICountable.cs" />
+    <Compile Include="ModelBase\IEditableCollection.cs" />
+    <Compile Include="ModelBase\IValueWithSource.cs" />
+    <Compile Include="ModelBase\MapController.cs" />
     <Compile Include="ModelBase\ModelListViewModelBase.cs" />
+    <Compile Include="ModelBase\NameCache.cs" />
     <Compile Include="ModelBase\ViewModelBase.cs" />
     <Compile Include="ModelBase\VisibleViewModelBase.cs" />
     <Compile Include="ModuleBase.cs" />
     <Compile Include="NativeWin32.cs" />
+    <Compile Include="ObservableObject.cs" />
+    <Compile Include="PresentationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="RegionNames.cs" />
     <Compile Include="RegionService.cs" />
@@ -142,24 +160,34 @@
     <Compile Include="Services\InteractionService.cs" />
     <Compile Include="Services\PresentationServices.cs" />
     <Compile Include="VisibleModuleBase.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <Compile Include="Widgets\DefaultWidgetCreator.cs" />
+    <Compile Include="Widgets\IDiagram.cs" />
+    <Compile Include="Widgets\IWidgetCreator.cs" />
+    <Compile Include="Widgets\WidgetCreatorRegistry.cs" />
+    <Compile Include="Widgets\WidgetEventData.cs" />
+    <Compile Include="Widgets\WidgetViewModel.cs" />
     <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure.Data\Infrastructure.Data.csproj">
-      <Project>{2FDF3248-E800-4ADC-92EA-09A9837694F7}</Project>
-      <Name>Infrastructure.Data</Name>
+    <ProjectReference Include="..\SamplePrism.Domain\SamplePrism.Domain.csproj">
+      <Project>{DDF39B0E-06A4-44FB-8CBA-762C9FF8B4DD}</Project>
+      <Name>SamplePrism.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj">
+    <ProjectReference Include="..\SamplePrism.Infrastructure.Data\SamplePrism.Infrastructure.Data.csproj">
+      <Project>{2FDF3248-E800-4ADC-92EA-09A9837694F7}</Project>
+      <Name>SamplePrism.Infrastructure.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Infrastructure\SamplePrism.Infrastructure.csproj">
       <Project>{71128390-CB78-4362-8E9F-962E6A5195C2}</Project>
-      <Name>Infrastructure</Name>
+      <Name>SamplePrism.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Localization\SamplePrism.Localization.csproj">
+      <Project>{F214A5E2-8782-420A-81A6-DC082C1C2E93}</Project>
+      <Name>SamplePrism.Localization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SamplePrism.Persistance\SamplePrism.Persistance.csproj">
+      <Project>{7F49A8D3-B5D3-406A-8A70-B1F610E57A0E}</Project>
+      <Name>SamplePrism.Persistance</Name>
     </ProjectReference>
     <ProjectReference Include="..\SamplePrism.Presentation.Services\SamplePrism.Presentation.Services.csproj">
       <Project>{8E4554A9-6676-439F-87EC-99F8B6C5394F}</Project>

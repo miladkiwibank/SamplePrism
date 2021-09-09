@@ -1,83 +1,83 @@
-﻿using Prism.Events;
-using Prism.Mvvm;
+﻿using System;
+using Prism.Events;
 using Prism.Regions;
-using SamplePrism.Modules.NavigationModule.ViewModels;
-using SamplePrism.Modules.NavigationModule.Views;
+using SamplePrism.Domain.Models.Users;
+using SamplePrism.Localization.Properties;
 using SamplePrism.Presentation.Common;
 using SamplePrism.Presentation.Services;
 using SamplePrism.Presentation.Services.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SamplePrism.Services.Common;
 
 namespace SamplePrism.Modules.NavigationModule
 {
     public class NavigationModule : VisibleModuleBase
     {
-        private readonly IRegionManager m_regionManager;
-        private readonly NavigationView m_navigationView;
-        private readonly IApplicationState m_applicationState;
+        private readonly IRegionManager _regionManager;
+        private readonly NavigationView _navigationView;
+        private readonly IUserService _userService;
+        private readonly IApplicationState _applicationState;
 
-        public NavigationModule(IRegionManager regionManager, NavigationView navigationView, IApplicationState applicationState)
+        public NavigationModule(IRegionManager regionManager, NavigationView navigationView, IUserService userService,
+            IApplicationState applicationState)
             : base(regionManager, AppScreens.Navigation)
         {
-            m_regionManager = regionManager ?? throw new ArgumentNullException(nameof(regionManager));
-            m_applicationState = applicationState ?? throw new ArgumentNullException(nameof(applicationState));
-            m_navigationView = navigationView ?? throw new ArgumentNullException(nameof(navigationView));
-            m_regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(NavigationView));
-            PermissionRegistry.RegisterPermission(PermissionNames.OpenNavigation, PermissionCategories.Navigation, "打开导航");
+            _regionManager = regionManager;
+            _navigationView = navigationView;
+            _userService = userService;
+            _applicationState = applicationState;
 
-            //EventServiceFactory.EventService.GetEvent<GenericEvent<User>>()
-            //    .Subscribe(x =>
-            //    {
-            //        if (x.Topic == EventTopicNames.UserSignedIn)
-            //            ActivateNavigation();
-            //    });
-            EventServiceFactory.EventService.GetEvent<GenericEvent<EventAggregator>>()
-                .Subscribe(x =>
+            PermissionRegistry.RegisterPermission(PermissionNames.OpenNavigation, PermissionCategories.Navigation, Resources.CanOpenNavigation);
+
+            EventServiceFactory.EventService.GetEvent<GenericEvent<User>>().Subscribe(
+                x =>
+                {
+                    if (x.Topic == EventTopicNames.UserLoggedIn)
+                        ActivateNavigation();
+                });
+
+            EventServiceFactory.EventService.GetEvent<GenericEvent<EventAggregator>>().Subscribe(
+                x =>
                 {
                     if (x.Topic == EventTopicNames.ActivateNavigation)
                         ActivateNavigation();
                 });
-            //EventServiceFactory.EventService.GetEvent<GenericEvent<AppScreenChangeData>>()
-            //    .Subscribe(x =>
-            //    {
-            //        if (x.Topic == EventTopicNames.ScreenChanged)
-            //        {
-            //            m_applicationState.NotifyEvent(RuleEventNames.ApplicationScreenChanged, new
-            //            {
-            //                PreviousScreen = Enum.GetName(typeof(AppScreens), x.Value.PreviousScreen),
-            //                CurrentScreen = Enum.GetName(typeof(AppScreens), x.Value.CurrentScreen)
-            //            });
-            //        }
-            //    });
+
+            EventServiceFactory.EventService.GetEvent<GenericEvent<AppScreenChangeData>>().Subscribe(
+                x =>
+                {
+                    if (x.Topic == EventTopicNames.Changed)
+                    {
+                        _applicationState.NotifyEvent(RuleEventNames.ApplicationScreenChanged,
+                            new
+                            {
+                                PreviousScreen = Enum.GetName(typeof(AppScreens), x.Value.PreviousScreen),
+                                CurrentScreen = Enum.GetName(typeof(AppScreens), x.Value.CurrentScreen)
+                            });
+                    }
+                });
         }
 
         public override object GetVisibleView()
         {
-            return m_navigationView;
+            return _navigationView;
         }
 
-        protected override void OnPreInitialization()
+        protected override void OnInitialization()
         {
-            //base.OnPreInitialization();
-            ViewModelLocationProvider.Register<NavigationView, NavigationViewModel>();
-
+            _regionManager.AddToRegion(RegionNames.MainRegion, _navigationView);
+            //_regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(NavigationView));
         }
 
         private void ActivateNavigation()
         {
-            //TODO check permission
-            if (true)// m_userManager.IsUserPermittedFor(PermissionNames.OpenNavigation)
+            if (_userService.IsUserPermittedFor(PermissionNames.OpenNavigation))
             {
                 Activate();
-                ((NavigationViewModel)m_navigationView.DataContext).Refresh();
+                ((NavigationViewModel)_navigationView.DataContext).Refresh();
             }
-            else
+            else if (_applicationState.IsCurrentWorkPeriodOpen)
             {
-                //TODO: open no permission view
+                EventServiceFactory.EventService.PublishEvent(EventTopicNames.ActivatePosView);
             }
         }
     }

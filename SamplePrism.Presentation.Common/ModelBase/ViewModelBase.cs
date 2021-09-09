@@ -1,25 +1,18 @@
-﻿using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
 
 namespace SamplePrism.Presentation.Common.ModelBase
 {
-    public abstract class ViewModelBase : BindableBase
+    public abstract class ViewModelBase : ObservableObject
     {
-        ~ViewModelBase()
+        [Browsable(false)]
+        public string HeaderInfo
         {
-#if DEBUG
-            string msg = string.Format("{0} ({1}) ({2}) Finalized", GetType().Name, Header, GetHashCode());
-            System.Diagnostics.Debug.WriteLine(msg);
-#endif
-            Dispose(false);
+            get { return GetHeaderInfo(); }
         }
 
-        public string Header { get; set; }
-
-        protected abstract string GetHeader();
+        protected abstract string GetHeaderInfo();
 
         protected void SetActiveView(IEnumerable<VisibleViewModelBase> views, VisibleViewModelBase wm)
         {
@@ -34,14 +27,13 @@ namespace SamplePrism.Presentation.Common.ModelBase
             return collectionView.CurrentItem as VisibleViewModelBase;
         }
 
-        public void Dispose()
+#if DEBUG
+        ~ViewModelBase()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            string msg = string.Format("{0} ({1}) ({2}) Finalized", GetType().Name, HeaderInfo, GetHashCode());
+            System.Diagnostics.Debug.WriteLine(msg);
         }
+#endif
 
-        protected virtual void Dispose(bool disposing)
-        {
-        }
     }
 }
